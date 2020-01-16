@@ -48,9 +48,11 @@ class TreeView extends Component {
         let data = {
             name: 'Organization Chart',
             children: searchResults ? searchResults.map((entity) => {
+                let organizations = JSON.parse(entity.attributes.organizations.raw_value);
+
                 return {
                     name: entity.title,
-                    children: entity.links ? entity.links.map((link) => {
+                    children: organizations ? entity.links.map((link) => {
                         numberOfNodes++;
                         return {
                             name: link
