@@ -52,7 +52,7 @@ class TreeView extends Component {
 
                 return {
                     name: entity.title,
-                    children: organizations ? entity.links.map((link) => {
+                    children: organizations ? organizations.map((link) => {
                         numberOfNodes++;
                         return {
                             name: link
