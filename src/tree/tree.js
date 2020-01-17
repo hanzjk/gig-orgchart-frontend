@@ -5,6 +5,7 @@ import {withStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tree from 'react-tree-graph';
 import './tree.css'
+import HorizontalTimeline from 'react-horizontal-timeline';
 
 const styles = theme => ({
     container: {
@@ -41,26 +42,86 @@ class TreeView extends Component {
         }
     }
 
+
+    state = {value: 0, previous: 0};
+
     render() {
         const {classes, searchResults} = this.props;
+        const state=this.state;
 
+        let dates = [];
         let numberOfNodes = 0;
+
+        function addDateToTimeline(item, index) {
+            let newDate = item.start_date;
+            if (!dates.includes(newDate)) {
+                dates.push(newDate);
+            }
+        }
+
+        function getValueByDate(values, date) {
+            // sort values by date
+            if (values === null) {
+                return ""
+            }
+
+            let sortedValues = values;
+            sortedValues.sort((a, b) => (a.start_date < b.start_date) ? 1 : -1);
+            // pick the value with highest date lower than or equal to the given date
+            let i;
+            let selectedValue = "";
+            for (i = 0; i < sortedValues.length; i++) {
+
+                if (sortedValues[i].start_date <= date) {
+                    selectedValue = sortedValues[i].raw_value;
+                    break
+                }
+            }
+            //return the raw
+            return selectedValue
+        }
+
         let data = {
             name: 'Organization Chart',
-            children: searchResults ? searchResults.map((entity) => {
-                let organizations = JSON.parse(entity.attributes.organizations.raw_value);
-
-                return {
-                    name: entity.title,
-                    children: organizations ? organizations.map((link) => {
-                        numberOfNodes++;
-                        return {
-                            name: link
-                        }
-                    }) : []
-                }
-            }) : []
+            children: []
         };
+
+        // add dates first
+        let i;
+        for (i = 0; i < searchResults.length; i++) {
+            let entity = searchResults[i];
+            entity.attributes.organizations.forEach(addDateToTimeline);
+            entity.attributes.titles.forEach(addDateToTimeline);
+        }
+        dates.sort();
+
+        if (searchResults) {
+            let i;
+            for (i = 0; i < searchResults.length; i++) {
+                let entity=searchResults[i];
+                entity.attributes.organizations.forEach(addDateToTimeline);
+                entity.attributes.titles.forEach(addDateToTimeline);
+                let organizations = [];
+                let organizationsValue=getValueByDate(entity.attributes.organizations, dates[state.value]);
+                let title = getValueByDate(entity.attributes.titles, dates[state.value]);
+
+                if (organizationsValue!==""){
+                    organizations=JSON.parse(organizationsValue);
+                }
+                if (title !== "") {
+                    data.children.push({
+                        name: title,
+                        children: organizations ? organizations.map((link) => {
+                            numberOfNodes++;
+                            return {
+                                name: link
+                            }
+                        }) : []
+                    })
+                }
+            }
+
+        }
 
         return (
             <div className="content">
@@ -69,6 +130,16 @@ class TreeView extends Component {
                         <Typography variant="h4" component="h4">
                             Organization Chart
                         </Typography>
+                        <div id="timeline" style={{height: '70px', margin: '10px'}}>
+                            <HorizontalTimeline
+                                styles={{background: '#ffffff', foreground: '#2593B8', outline: '#dfdfdf'}}
+                                index={this.state.value}
+                                indexClick={(index) => {
+                                    console.log(dates[index]);
+                                    this.setState({value: index, previous: this.state.value});
+                                }}
+                                values={dates}/>
+                        </div>
                         <div className="custom-container" style={{overflow: "auto"}}>
                             <Tree
                                 data={data}
