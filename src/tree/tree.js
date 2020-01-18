@@ -51,10 +51,7 @@ class TreeView extends Component {
             value: 0,
             previous: 0,
             collapsed: [],
-            dates: [],
         };
-
-        this.addDateToTimeline = this.addDateToTimeline.bind(this);
     }
 
     componentDidMount() {
@@ -68,21 +65,9 @@ class TreeView extends Component {
         }
     }
 
-    addDateToTimeline(item) {
-        let newDate = item.start_date;
-        console.log(this.state.dates, newDate, this.state.dates.includes(newDate));
-        if (!this.state.dates.includes(newDate)) {
-            this.setState(prevState => ({
-                dates: [...prevState.dates, newDate]
-            }));
-            console.log(this.state.dates)
-        }
-    }
-
-
     render() {
         const {classes, searchResults} = this.props;
-        const {value, collapsed, dates} = this.state;
+        const {value, collapsed} = this.state;
 
         let data = {
             keyVal: "root",
@@ -91,13 +76,21 @@ class TreeView extends Component {
         };
 
         // add dates first
-        let i, numberOfNodes = 0;
+        let i, numberOfNodes = 0, dates = [];
+
+        function addDateToTimeline(item) {
+            let newDate = item.start_date;
+            if (!dates.includes(newDate)) {
+                dates.push(newDate);
+            }
+        }
+
         for (i = 0; i < searchResults.length; i++) {
             let entity = searchResults[i];
-            entity.attributes.organizations.forEach(this.addDateToTimeline);
-            entity.attributes.titles.forEach(this.addDateToTimeline);
+            entity.attributes.organizations.forEach(addDateToTimeline);
+            entity.attributes.titles.forEach(addDateToTimeline);
         }
-        // dates.sort();
+        dates.sort();
 
         if (searchResults) {
             let i;
