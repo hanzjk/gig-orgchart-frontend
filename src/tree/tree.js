@@ -85,57 +85,61 @@ class TreeView extends Component {
             }
         }
 
-        for (i = 0; i < searchResults ? searchResults.length : 0; i++) {
-            let entity = searchResults[i];
-            entity.attributes.organizations.forEach(addDateToTimeline);
-            entity.attributes.titles.forEach(addDateToTimeline);
-        }
-        dates.sort();
-
         if (searchResults) {
-            let i;
+
             for (i = 0; i < searchResults.length; i++) {
                 let entity = searchResults[i];
-                let organizations = [];
-                let organizationsValue = getValueByDate(entity.attributes.organizations, dates[value]);
-                let title = getValueByDate(entity.attributes.titles, dates[value]);
-
-                if (organizationsValue !== "" && collapsed.includes(entity.title)) {
-                    organizations = JSON.parse(organizationsValue);
-                }
-                if (title !== "") {
-                    numberOfNodes += (organizations ? organizations.length : 0) + 1;
-                    data.children.push({
-                        title: entity.title,
-                        keyVal: title,
-                        name: title,
-                        children: organizations ? organizations.map((link) => {
-                            return {
-                                keyVal: title + link,
-                                name: link,
-                            }
-                        }) : [],
-                        gProps: {
-                            className: 'node',
-                            onClick: (event, node) => {
-                                let collapseList = collapsed;
-                                if (collapseList.includes(entity.title)) {
-                                    let index = collapseList.indexOf(entity.title);
-
-                                    if (index > -1) {
-                                        collapseList.splice(index, 1);
-                                    }
-                                } else {
-                                    collapseList.push(entity.title);
-                                }
-                                this.setState({collapsed: collapseList});
-                            },
-
-                        }
-                    })
-                }
+                entity.attributes.organizations.forEach(addDateToTimeline);
+                entity.attributes.titles.forEach(addDateToTimeline);
             }
+            dates.sort();
 
+            if (searchResults) {
+                let i;
+                for (i = 0; i < searchResults.length; i++) {
+                    let entity = searchResults[i];
+                    let organizations = [];
+                    let organizationsValue = getValueByDate(entity.attributes.organizations, dates[value]);
+                    let title = getValueByDate(entity.attributes.titles, dates[value]);
+
+                    if (organizationsValue !== "" && collapsed.includes(entity.title)) {
+                        organizations = JSON.parse(organizationsValue);
+                    }
+                    if (title !== "") {
+                        console.log(organizations ? organizations.length : 1);
+                        numberOfNodes += organizations ? (organizations.length > 0 ? organizations.length : 1) : 0;
+                        data.children.push({
+                            title: entity.title,
+                            keyVal: title,
+                            name: title,
+                            children: organizations ? organizations.map((link) => {
+                                return {
+                                    keyVal: title + link,
+                                    name: link,
+                                }
+                            }) : [],
+                            gProps: {
+                                className: 'node',
+                                onClick: (event, node) => {
+                                    let collapseList = collapsed;
+                                    if (collapseList.includes(entity.title)) {
+                                        let index = collapseList.indexOf(entity.title);
+
+                                        if (index > -1) {
+                                            collapseList.splice(index, 1);
+                                        }
+                                    } else {
+                                        collapseList.push(entity.title);
+                                    }
+                                    this.setState({collapsed: collapseList});
+                                },
+
+                            }
+                        })
+                    }
+                }
+
+            }
         }
 
         return (
