@@ -20,7 +20,7 @@ const styles = theme => ({
         color: 'white',
         textAlign: 'left',
         margin: '10px',
-        backgroundColor: '#242424'
+        backgroundColor: '#242424',
     },
     paragraph: {
         margin: '15px 0'
@@ -111,7 +111,7 @@ class TreeView extends Component {
                     organizations = JSON.parse(organizationsValue);
                 }
                 if (title !== "") {
-                    numberOfNodes += organizations.length+1;
+                    numberOfNodes += organizations.length + 1;
                     data.children.push({
                         title: entity.title,
                         keyVal: title,
@@ -148,7 +148,7 @@ class TreeView extends Component {
         return (
             <div className="content">
                 <div className="custom-container">
-                    <Paper className={classes.searchResult} elevation={1}>
+                    <Paper className={classes.searchResult} style={{position: 'fixed', left:'10px', right:'10px', backgroundColor:'rgba(36,36,36,0.8)'}} elevation={1}>
                         <Typography variant="h4" component="h4">
                             Organization Chart
                         </Typography>
@@ -162,6 +162,8 @@ class TreeView extends Component {
                                 }}
                                 values={dates}/>
                         </div>
+                    </Paper>
+                    <Paper className={classes.searchResult} style={{paddingTop:'200px'}} elevation={1}>
                         <div className="custom-container" style={{overflow: "auto"}}>
                             <Tree
                                 data={data}
