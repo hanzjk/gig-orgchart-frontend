@@ -83,7 +83,7 @@ class TreeView extends Component {
         }
 
         let data = {
-            key: "root",
+            keyVal: "root",
             name: 'Organization Chart',
             children: []
         };
@@ -114,11 +114,11 @@ class TreeView extends Component {
                     numberOfNodes += organizations.length+1;
                     data.children.push({
                         title: entity.title,
-                        key: title,
+                        keyVal: title,
                         name: title,
                         children: organizations ? organizations.map((link) => {
                             return {
-                                key: title + link,
+                                keyVal: title + link,
                                 name: link,
                             }
                         }) : [],
@@ -172,7 +172,7 @@ class TreeView extends Component {
                                 }}
                                 margins={{bottom: 10, left: 20, right: 350, top: 10}}
                                 animated
-                                keyProp={"key"}
+                                keyProp={"keyVal"}
                             />
                         </div>
                     </Paper>
