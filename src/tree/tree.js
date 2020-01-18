@@ -83,6 +83,7 @@ class TreeView extends Component {
         }
 
         let data = {
+            key: "root",
             name: 'Organization Chart',
             children: []
         };
@@ -106,22 +107,38 @@ class TreeView extends Component {
                 let organizationsValue = getValueByDate(entity.attributes.organizations, dates[state.value]);
                 let title = getValueByDate(entity.attributes.titles, dates[state.value]);
 
-                if (organizationsValue !== "" && state.collapsed.includes(title)) {
+                if (organizationsValue !== "" && state.collapsed.includes(entity.title)) {
                     organizations = JSON.parse(organizationsValue);
                 }
                 if (title !== "") {
-                    numberOfNodes++;
+                    numberOfNodes += organizations.length+1;
                     data.children.push({
                         title: entity.title,
+                        key: title,
                         name: title,
-                        parent: true,
                         children: organizations ? organizations.map((link) => {
-                            numberOfNodes++;
                             return {
+                                key: title + link,
                                 name: link,
-                                parent:false
                             }
-                        }) : []
+                        }) : [],
+                        gProps: {
+                            className: 'node',
+                            onClick: (event, node) => {
+                                let collapseList = state.collapsed;
+                                if (collapseList.includes(entity.title)) {
+                                    let index = collapseList.indexOf(entity.title);
+
+                                    if (index > -1) {
+                                        collapseList.splice(index, 1);
+                                    }
+                                } else {
+                                    collapseList.push(entity.title);
+                                }
+                                this.setState({collapsed: collapseList});
+                            },
+
+                        }
                     })
                 }
             }
@@ -153,25 +170,9 @@ class TreeView extends Component {
                                 svgProps={{
                                     className: 'custom'
                                 }}
-                                gProps={{
-                                    className: 'node',
-                                    onClick: (event, node) =>{
-                                        let collapseList=state.collapsed;
-                                        if (collapseList.includes(node)){
-                                            let index = collapseList.indexOf(node);
-
-                                            if (index > -1) {
-                                                collapseList.splice(index, 1);
-                                            }
-                                        }else{
-                                            collapseList.push(node);
-                                        }
-                                        this.setState({collapsed:collapseList});
-                                    },
-
-                                }}
                                 margins={{bottom: 10, left: 20, right: 350, top: 10}}
                                 animated
+                                keyProp={"key"}
                             />
                         </div>
                     </Paper>
