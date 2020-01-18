@@ -17,9 +17,10 @@ const styles = theme => ({
         ...theme.mixins.gutters(),
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
-        color: 'black',
+        color: 'white',
         textAlign: 'left',
         margin: '10px',
+        backgroundColor: '#242424'
     },
     paragraph: {
         margin: '15px 0'
@@ -43,11 +44,11 @@ class TreeView extends Component {
     }
 
 
-    state = {value: 0, previous: 0};
+    state = {value: 0, previous: 0, collapsed: []};
 
     render() {
         const {classes, searchResults} = this.props;
-        const state=this.state;
+        const state = this.state;
 
         let dates = [];
         let numberOfNodes = 0;
@@ -98,23 +99,27 @@ class TreeView extends Component {
         if (searchResults) {
             let i;
             for (i = 0; i < searchResults.length; i++) {
-                let entity=searchResults[i];
+                let entity = searchResults[i];
                 entity.attributes.organizations.forEach(addDateToTimeline);
                 entity.attributes.titles.forEach(addDateToTimeline);
                 let organizations = [];
-                let organizationsValue=getValueByDate(entity.attributes.organizations, dates[state.value]);
+                let organizationsValue = getValueByDate(entity.attributes.organizations, dates[state.value]);
                 let title = getValueByDate(entity.attributes.titles, dates[state.value]);
 
-                if (organizationsValue!==""){
-                    organizations=JSON.parse(organizationsValue);
+                if (organizationsValue !== "" && state.collapsed.includes(title)) {
+                    organizations = JSON.parse(organizationsValue);
                 }
                 if (title !== "") {
+                    numberOfNodes++;
                     data.children.push({
+                        title: entity.title,
                         name: title,
+                        parent: true,
                         children: organizations ? organizations.map((link) => {
                             numberOfNodes++;
                             return {
-                                name: link
+                                name: link,
+                                parent:false
                             }
                         }) : []
                     })
@@ -132,7 +137,7 @@ class TreeView extends Component {
                         </Typography>
                         <div id="timeline" style={{height: '70px', margin: '10px'}}>
                             <HorizontalTimeline
-                                styles={{background: '#ffffff', foreground: '#2593B8', outline: '#dfdfdf'}}
+                                styles={{background: '#242424', foreground: '#2593B8', outline: '#dfdfdf'}}
                                 index={this.state.value}
                                 indexClick={(index) => {
                                     console.log(dates[index]);
@@ -148,7 +153,25 @@ class TreeView extends Component {
                                 svgProps={{
                                     className: 'custom'
                                 }}
+                                gProps={{
+                                    className: 'node',
+                                    onClick: (event, node) =>{
+                                        let collapseList=state.collapsed;
+                                        if (collapseList.includes(node)){
+                                            let index = collapseList.indexOf(node);
+
+                                            if (index > -1) {
+                                                collapseList.splice(index, 1);
+                                            }
+                                        }else{
+                                            collapseList.push(node);
+                                        }
+                                        this.setState({collapsed:collapseList});
+                                    },
+
+                                }}
                                 margins={{bottom: 10, left: 20, right: 350, top: 10}}
+                                animated
                             />
                         </div>
                     </Paper>
