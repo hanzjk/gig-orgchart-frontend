@@ -8,6 +8,18 @@ import './tree.css'
 import HorizontalTimeline from 'react-horizontal-timeline';
 
 const styles = theme => ({
+    header: {
+        position: 'fixed',
+        left: '10px',
+        right: '10px',
+        backgroundColor: 'rgba(36,36,36,0.8)',
+        ...theme.mixins.gutters(),
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2),
+        color: 'white',
+        textAlign: 'left',
+        margin: '10px',
+    },
     container: {
         minHeight: '100vh',
         backgroundColor: '#eeeeee',
@@ -148,7 +160,7 @@ class TreeView extends Component {
         return (
             <div className="content">
                 <div className="custom-container">
-                    <Paper className={classes.searchResult} style={{position: 'fixed', left:'10px', right:'10px', backgroundColor:'rgba(36,36,36,0.8)'}} elevation={1}>
+                    <Paper className={classes.header} elevation={1}>
                         <Typography variant="h4" component="h4">
                             Organization Chart
                         </Typography>
@@ -163,7 +175,7 @@ class TreeView extends Component {
                                 values={dates}/>
                         </div>
                     </Paper>
-                    <Paper className={classes.searchResult} style={{paddingTop:'200px'}} elevation={1}>
+                    <Paper className={classes.searchResult} style={{paddingTop: '200px'}} elevation={1}>
                         <div className="custom-container" style={{overflow: "auto"}}>
                             <Tree
                                 data={data}
