@@ -6,6 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Tree from 'react-tree-graph';
 import './tree.css'
 import HorizontalTimeline from 'react-horizontal-timeline';
+import {getValueByDate} from "../index";
 
 const styles = theme => ({
     header: {
@@ -44,6 +45,18 @@ const styles = theme => ({
 
 class TreeView extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: 0,
+            previous: 0,
+            collapsed: [],
+            dates: [],
+        };
+
+        this.addDateToTimeline = this.addDateToTimeline.bind(this);
+    }
+
     componentDidMount() {
         this.props.handleChange("searchKey", this.props.match.params.searchKey);
         this.props.getSearchResults("OrgChart:");
@@ -55,44 +68,21 @@ class TreeView extends Component {
         }
     }
 
+    addDateToTimeline(item) {
+        let newDate = item.start_date;
+        console.log(this.state.dates, newDate, this.state.dates.includes(newDate));
+        if (!this.state.dates.includes(newDate)) {
+            this.setState(prevState => ({
+                dates: [...prevState.dates, newDate]
+            }));
+            console.log(this.state.dates)
+        }
+    }
 
-    state = {value: 0, previous: 0, collapsed: []};
 
     render() {
         const {classes, searchResults} = this.props;
-        const state = this.state;
-
-        let dates = [];
-        let numberOfNodes = 0;
-
-        function addDateToTimeline(item, index) {
-            let newDate = item.start_date;
-            if (!dates.includes(newDate)) {
-                dates.push(newDate);
-            }
-        }
-
-        function getValueByDate(values, date) {
-            // sort values by date
-            if (values === null) {
-                return ""
-            }
-
-            let sortedValues = values;
-            sortedValues.sort((a, b) => (a.start_date < b.start_date) ? 1 : -1);
-            // pick the value with highest date lower than or equal to the given date
-            let i;
-            let selectedValue = "";
-            for (i = 0; i < sortedValues.length; i++) {
-
-                if (sortedValues[i].start_date <= date) {
-                    selectedValue = sortedValues[i].raw_value;
-                    break
-                }
-            }
-            //return the raw
-            return selectedValue
-        }
+        const {value, collapsed, dates} = this.state;
 
         let data = {
             keyVal: "root",
@@ -101,29 +91,27 @@ class TreeView extends Component {
         };
 
         // add dates first
-        let i;
+        let i, numberOfNodes = 0;
         for (i = 0; i < searchResults.length; i++) {
             let entity = searchResults[i];
-            entity.attributes.organizations.forEach(addDateToTimeline);
-            entity.attributes.titles.forEach(addDateToTimeline);
+            entity.attributes.organizations.forEach(this.addDateToTimeline);
+            entity.attributes.titles.forEach(this.addDateToTimeline);
         }
-        dates.sort();
+        // dates.sort();
 
         if (searchResults) {
             let i;
             for (i = 0; i < searchResults.length; i++) {
                 let entity = searchResults[i];
-                entity.attributes.organizations.forEach(addDateToTimeline);
-                entity.attributes.titles.forEach(addDateToTimeline);
                 let organizations = [];
-                let organizationsValue = getValueByDate(entity.attributes.organizations, dates[state.value]);
-                let title = getValueByDate(entity.attributes.titles, dates[state.value]);
+                let organizationsValue = getValueByDate(entity.attributes.organizations, dates[value]);
+                let title = getValueByDate(entity.attributes.titles, dates[value]);
 
-                if (organizationsValue !== "" && state.collapsed.includes(entity.title)) {
+                if (organizationsValue !== "" && collapsed.includes(entity.title)) {
                     organizations = JSON.parse(organizationsValue);
                 }
                 if (title !== "") {
-                    numberOfNodes += organizations.length + 1;
+                    numberOfNodes += (organizations ? organizations.length : 0) + 1;
                     data.children.push({
                         title: entity.title,
                         keyVal: title,
@@ -137,7 +125,7 @@ class TreeView extends Component {
                         gProps: {
                             className: 'node',
                             onClick: (event, node) => {
-                                let collapseList = state.collapsed;
+                                let collapseList = collapsed;
                                 if (collapseList.includes(entity.title)) {
                                     let index = collapseList.indexOf(entity.title);
 
@@ -167,10 +155,10 @@ class TreeView extends Component {
                         <div id="timeline" style={{height: '70px', margin: '10px'}}>
                             <HorizontalTimeline
                                 styles={{background: '#242424', foreground: '#2593B8', outline: '#dfdfdf'}}
-                                index={this.state.value}
+                                index={value}
                                 indexClick={(index) => {
-                                    console.log(dates[index]);
-                                    this.setState({value: index, previous: this.state.value});
+                                    console.log(index, dates[index]);
+                                    this.setState({value: index, previous: value});
                                 }}
                                 values={dates}/>
                         </div>
