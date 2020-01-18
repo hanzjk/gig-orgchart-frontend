@@ -85,7 +85,7 @@ class TreeView extends Component {
             }
         }
 
-        for (i = 0; i < searchResults.length; i++) {
+        for (i = 0; i < searchResults ? searchResults.length ? 0; i++) {
             let entity = searchResults[i];
             entity.attributes.organizations.forEach(addDateToTimeline);
             entity.attributes.titles.forEach(addDateToTimeline);
