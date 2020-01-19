@@ -79,7 +79,7 @@ class TreeView extends Component {
         let i, numberOfNodes = 0, dates = [];
 
         function addDateToTimeline(item) {
-            let newDate = item.start_date;
+            let newDate = item.date;
             if (!dates.includes(newDate)) {
                 dates.push(newDate);
             }
@@ -169,7 +169,7 @@ class TreeView extends Component {
                                 svgProps={{
                                     className: 'custom'
                                 }}
-                                margins={{bottom: 10, left: 20, right: 350, top: 10}}
+                                margins={{bottom: 10, left: 20, right: 500, top: 10}}
                                 animated
                                 keyProp={"keyVal"}
                             />

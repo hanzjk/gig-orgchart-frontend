@@ -19,13 +19,13 @@ export function getValueByDate(values, date) {
     }
 
     let sortedValues = values;
-    sortedValues.sort((a, b) => (a.start_date < b.start_date) ? 1 : -1);
+    sortedValues.sort((a, b) => (a.date < b.date) ? 1 : -1);
     // pick the value with highest date lower than or equal to the given date
     let i;
     let selectedValue = "";
     for (i = 0; i < sortedValues.length; i++) {
 
-        if (sortedValues[i].start_date <= date) {
+        if (sortedValues[i].date <= date) {
             selectedValue = sortedValues[i].raw_value;
             break
         }
