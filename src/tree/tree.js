@@ -105,7 +105,7 @@ class TreeView extends Component {
                     if (organizationsValue !== "" && collapsed.includes(entity.title)) {
                         organizations = JSON.parse(organizationsValue);
                     }
-                    if (title !== "") {
+                    if (title !== "" && !title.includes(" - Terminated on ")) {
                         console.log(organizations ? organizations.length : 1);
                         numberOfNodes += organizations ? (organizations.length > 0 ? organizations.length : 1) : 0;
                         data.children.push({
