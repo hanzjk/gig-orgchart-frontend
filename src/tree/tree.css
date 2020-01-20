@@ -4,7 +4,6 @@ div.custom-container {
 
 svg.custom{
   -webkit-transition: height 0.5s;
-  min-height: 100vh;
 }
 
 svg.custom .node circle {

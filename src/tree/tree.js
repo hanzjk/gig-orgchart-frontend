@@ -50,7 +50,11 @@ class TreeView extends Component {
             value: 0,
             previous: 0,
             collapsed: [],
+            nodeCount: 0,
+            treeData: [],
         };
+
+        this.generateTreeDataStructure = this.generateTreeDataStructure.bind(this);
 
     }
 
@@ -65,8 +69,9 @@ class TreeView extends Component {
         }
     }
 
-    render() {
-        const {classes, searchResults, dates} = this.props;
+    generateTreeDataStructure() {
+
+        const {searchResults, dates} = this.props;
         const {value, collapsed} = this.state;
 
         let data = {
@@ -75,16 +80,13 @@ class TreeView extends Component {
             children: []
         };
 
-        // add dates first
         let numberOfNodes = 10;
 
         if (searchResults) {
-            let sortedSearchResults = searchResults.slice();
+            let i, sortedSearchResults = searchResults.slice();
             sortedSearchResults.sort((a, b) => (a.title > b.title) ? 1 : -1);
-            let i;
             for (i = 0; i < sortedSearchResults.length; i++) {
-                let entity = sortedSearchResults[i];
-                let organizations = [];
+                let organizations = [], entity = sortedSearchResults[i];
                 let organizationsValue = getValueByDate(entity.attributes.organizations, dates[value]);
                 let title = getValueByDate(entity.attributes.titles, dates[value]);
 
@@ -106,7 +108,7 @@ class TreeView extends Component {
                         gProps: {
                             className: 'node',
                             onClick: (event, node) => {
-                                let collapseList = collapsed;
+                                let collapseList = collapsed.slice();
                                 if (collapseList.includes(entity.title)) {
                                     let index = collapseList.indexOf(entity.title);
 
@@ -116,7 +118,7 @@ class TreeView extends Component {
                                 } else {
                                     collapseList.push(entity.title);
                                 }
-                                this.setState({collapsed: collapseList});
+                                this.setState({collapsed: collapseList}, this.generateTreeDataStructure);
                             },
 
                         }
@@ -125,6 +127,13 @@ class TreeView extends Component {
             }
 
         }
+
+        this.setState({treeData: data, nodeCount: numberOfNodes});
+    }
+
+    render() {
+        const {classes, dates} = this.props;
+        const {value, treeData, nodeCount} = this.state;
 
         return (
             <div className="content">
@@ -139,7 +148,7 @@ class TreeView extends Component {
                                 index={value}
                                 indexClick={(index) => {
                                     console.log(index, dates[index]);
-                                    this.setState({value: index, previous: value});
+                                    this.setState({value: index, previous: value}, this.generateTreeDataStructure);
                                 }}
                                 values={dates}/>
                         </div>
@@ -147,8 +156,8 @@ class TreeView extends Component {
                     <Paper className={classes.searchResult} style={{paddingTop: '200px'}} elevation={1}>
                         <div className="custom-container" style={{overflow: "auto"}}>
                             <Tree
-                                data={data}
-                                height={numberOfNodes * 15}
+                                data={treeData}
+                                height={nodeCount * 15}
                                 width={1500}
                                 svgProps={{
                                     className: 'custom'
