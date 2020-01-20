@@ -76,6 +76,9 @@ class TreeView extends Component {
         if (prevProps.searchResults !== this.props.searchResults) {
             this.collectDatesForTimeline();
         }
+        if (prevState.dates !== this.state.dates) {
+            this.generateTreeDataStructure();
+        }
 
     }
 
@@ -100,7 +103,7 @@ class TreeView extends Component {
             dates.sort();
         }
 
-        this.setState({dates: dates});
+        this.setState({dates: dates,value:dates.length-1});
     }
 
     generateTreeDataStructure() {
