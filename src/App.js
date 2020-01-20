@@ -14,7 +14,8 @@ class App extends Component {
             searchKey: "",
             searchResults: [],
             loadedEntity: [],
-            loading: true
+            loading: true,
+            dates: []
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -22,6 +23,7 @@ class App extends Component {
         this.endLoading = this.endLoading.bind(this);
         this.getSearchResults = this.getSearchResults.bind(this);
         this.getEntity = this.getEntity.bind(this);
+        this.collectDatesForTimeline = this.collectDatesForTimeline.bind(this);
     }
 
     startLoading() {
@@ -46,7 +48,7 @@ class App extends Component {
             } else {
                 searchUrl += searchKey;
             }
-            searchUrl+='&limit=0';
+            searchUrl += '&limit=0';
             fetch(searchUrl, {
                 method: 'GET'
             }).then(results => {
@@ -54,6 +56,8 @@ class App extends Component {
             }).then(data => {
                 this.handleChange("searchResults", data);
             }).then(
+                dates => this.collectDatesForTimeline()
+            ).then(
                 end => this.endLoading()
             );
         }
@@ -76,6 +80,30 @@ class App extends Component {
         );
     }
 
+    collectDatesForTimeline() {
+        const {searchResults} = this.state;
+
+        let i, dates = [];
+
+        function addDateToTimeline(item) {
+            let newDate = item.date;
+            if (!dates.includes(newDate)) {
+                dates.push(newDate);
+            }
+        }
+
+        if (searchResults) {
+            for (i = 0; i < searchResults.length; i++) {
+                let entity = searchResults[i];
+                entity.attributes.organizations.forEach(addDateToTimeline);
+                entity.attributes.titles.forEach(addDateToTimeline);
+            }
+            dates.sort();
+        }
+
+        this.setState({dates: dates});
+    }
+
     render() {
         return (
             <div className="App">
@@ -87,6 +115,7 @@ class App extends Component {
                                                             handleChange={this.handleChange}
                                                             searchResults={this.state.searchResults}
                                                             getSearchResults={this.getSearchResults}
+                                                            dates={this.state.dates}
                                />}
                         />
                     </HashRouter>

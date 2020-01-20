@@ -51,6 +51,7 @@ class TreeView extends Component {
             previous: 0,
             collapsed: [],
         };
+
     }
 
     componentDidMount() {
@@ -65,7 +66,7 @@ class TreeView extends Component {
     }
 
     render() {
-        const {classes, searchResults} = this.props;
+        const {classes, searchResults, dates} = this.props;
         const {value, collapsed} = this.state;
 
         let data = {
@@ -75,71 +76,54 @@ class TreeView extends Component {
         };
 
         // add dates first
-        let i, numberOfNodes = 10, dates = [];
-
-        function addDateToTimeline(item) {
-            let newDate = item.date;
-            if (!dates.includes(newDate)) {
-                dates.push(newDate);
-            }
-        }
+        let numberOfNodes = 10;
 
         if (searchResults) {
+            let sortedSearchResults = searchResults.slice();
+            sortedSearchResults.sort((a, b) => (a.title > b.title) ? 1 : -1);
+            let i;
+            for (i = 0; i < sortedSearchResults.length; i++) {
+                let entity = sortedSearchResults[i];
+                let organizations = [];
+                let organizationsValue = getValueByDate(entity.attributes.organizations, dates[value]);
+                let title = getValueByDate(entity.attributes.titles, dates[value]);
 
-            for (i = 0; i < searchResults.length; i++) {
-                let entity = searchResults[i];
-                entity.attributes.organizations.forEach(addDateToTimeline);
-                entity.attributes.titles.forEach(addDateToTimeline);
-            }
-            dates.sort();
-
-            if (searchResults) {
-                let sortedSearchResults = searchResults.slice();
-                sortedSearchResults.sort((a, b) => (a.title > b.title) ? 1 : -1);
-                let i;
-                for (i = 0; i < sortedSearchResults.length; i++) {
-                    let entity = sortedSearchResults[i];
-                    let organizations = [];
-                    let organizationsValue = getValueByDate(entity.attributes.organizations, dates[value]);
-                    let title = getValueByDate(entity.attributes.titles, dates[value]);
-
-                    if (organizationsValue !== "" && collapsed.includes(entity.title)) {
-                        organizations = JSON.parse(organizationsValue);
-                    }
-                    if (title !== "" && !title.includes(" - Terminated on ")) {
-                        numberOfNodes += organizations ? (organizations.length > 0 ? organizations.length : 1) : 0;
-                        data.children.push({
-                            title: entity.title,
-                            keyVal: title,
-                            name: title,
-                            children: organizations ? organizations.map((link) => {
-                                return {
-                                    keyVal: title + link,
-                                    name: link,
-                                }
-                            }) : [],
-                            gProps: {
-                                className: 'node',
-                                onClick: (event, node) => {
-                                    let collapseList = collapsed;
-                                    if (collapseList.includes(entity.title)) {
-                                        let index = collapseList.indexOf(entity.title);
-
-                                        if (index > -1) {
-                                            collapseList.splice(index, 1);
-                                        }
-                                    } else {
-                                        collapseList.push(entity.title);
-                                    }
-                                    this.setState({collapsed: collapseList});
-                                },
-
-                            }
-                        })
-                    }
+                if (organizationsValue !== "" && collapsed.includes(entity.title)) {
+                    organizations = JSON.parse(organizationsValue);
                 }
+                if (title !== "" && !title.includes(" - Terminated on ")) {
+                    numberOfNodes += organizations ? (organizations.length > 0 ? organizations.length : 1) : 0;
+                    data.children.push({
+                        title: entity.title,
+                        keyVal: title,
+                        name: title,
+                        children: organizations ? organizations.map((link) => {
+                            return {
+                                keyVal: title + link,
+                                name: link,
+                            }
+                        }) : [],
+                        gProps: {
+                            className: 'node',
+                            onClick: (event, node) => {
+                                let collapseList = collapsed;
+                                if (collapseList.includes(entity.title)) {
+                                    let index = collapseList.indexOf(entity.title);
 
+                                    if (index > -1) {
+                                        collapseList.splice(index, 1);
+                                    }
+                                } else {
+                                    collapseList.push(entity.title);
+                                }
+                                this.setState({collapsed: collapseList});
+                            },
+
+                        }
+                    })
+                }
             }
+
         }
 
         return (
@@ -181,8 +165,14 @@ class TreeView extends Component {
     }
 }
 
-TreeView.propTypes = {
+TreeView
+    .propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(TreeView);
+export default withStyles(styles)
+
+(
+    TreeView
+)
+;
