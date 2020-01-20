@@ -51,6 +51,7 @@ class TreeView extends Component {
             previous: 0,
             collapsed: [],
             treeHeight: 0,
+            dates: [],
             treeData: {
                 keyVal: "root",
                 name: 'Organization Chart',
@@ -59,6 +60,7 @@ class TreeView extends Component {
         };
 
         this.generateTreeDataStructure = this.generateTreeDataStructure.bind(this);
+        this.collectDatesForTimeline = this.collectDatesForTimeline.bind(this);
 
     }
 
@@ -71,12 +73,40 @@ class TreeView extends Component {
         if (prevProps.match.params.searchKey !== this.props.match.params.searchKey) {
             this.props.getSearchResults("OrgChart:");
         }
+        if (prevProps.searchResults !== this.props.searchResults) {
+            this.collectDatesForTimeline();
+        }
+
+    }
+
+    collectDatesForTimeline() {
+        const {searchResults} = this.props;
+
+        let i, dates = [];
+
+        function addDateToTimeline(item) {
+            let newDate = item.date;
+            if (!dates.includes(newDate)) {
+                dates.push(newDate);
+            }
+        }
+
+        if (searchResults) {
+            for (i = 0; i < searchResults.length; i++) {
+                let entity = searchResults[i];
+                entity.attributes.organizations.forEach(addDateToTimeline);
+                entity.attributes.titles.forEach(addDateToTimeline);
+            }
+            dates.sort();
+        }
+
+        this.setState({dates: dates});
     }
 
     generateTreeDataStructure() {
 
-        const {searchResults, dates} = this.props;
-        const {value, collapsed} = this.state;
+        const {searchResults} = this.props;
+        const {value, collapsed, dates} = this.state;
 
         let data = {
             keyVal: "root",
@@ -136,8 +166,8 @@ class TreeView extends Component {
     }
 
     render() {
-        const {classes, dates} = this.props;
-        const {value, treeData, treeHeight} = this.state;
+        const {classes} = this.props;
+        const {value, treeData, treeHeight, dates} = this.state;
 
         return (
             <div className="content">
