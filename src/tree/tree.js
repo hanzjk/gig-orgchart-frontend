@@ -50,8 +50,12 @@ class TreeView extends Component {
             value: 0,
             previous: 0,
             collapsed: [],
-            nodeCount: 0,
-            treeData: [],
+            treeHeight: 0,
+            treeData: {
+                keyVal: "root",
+                name: 'Organization Chart',
+                children: []
+            },
         };
 
         this.generateTreeDataStructure = this.generateTreeDataStructure.bind(this);
@@ -86,7 +90,7 @@ class TreeView extends Component {
             let i, sortedSearchResults = searchResults.slice();
             sortedSearchResults.sort((a, b) => (a.title > b.title) ? 1 : -1);
             for (i = 0; i < sortedSearchResults.length; i++) {
-                let organizations = [], entity = sortedSearchResults[i];
+                let organizations = null, entity = sortedSearchResults[i];
                 let organizationsValue = getValueByDate(entity.attributes.organizations, dates[value]);
                 let title = getValueByDate(entity.attributes.titles, dates[value]);
 
@@ -94,7 +98,7 @@ class TreeView extends Component {
                     organizations = JSON.parse(organizationsValue);
                 }
                 if (title !== "" && !title.includes(" - Terminated on ")) {
-                    numberOfNodes += organizations ? (organizations.length > 0 ? organizations.length : 1) : 0;
+                    numberOfNodes += organizations ? organizations.length : 1;
                     data.children.push({
                         title: entity.title,
                         keyVal: title,
@@ -128,12 +132,12 @@ class TreeView extends Component {
 
         }
 
-        this.setState({treeData: data, nodeCount: numberOfNodes});
+        this.setState({treeData: data, treeHeight: numberOfNodes * 15});
     }
 
     render() {
         const {classes, dates} = this.props;
-        const {value, treeData, nodeCount} = this.state;
+        const {value, treeData, treeHeight} = this.state;
 
         return (
             <div className="content">
@@ -157,7 +161,7 @@ class TreeView extends Component {
                         <div className="custom-container" style={{overflow: "auto"}}>
                             <Tree
                                 data={treeData}
-                                height={nodeCount * 15}
+                                height={treeHeight}
                                 width={1500}
                                 svgProps={{
                                     className: 'custom'
