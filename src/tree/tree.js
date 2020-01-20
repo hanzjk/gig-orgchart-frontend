@@ -22,7 +22,6 @@ const styles = theme => ({
         margin: '10px',
     },
     container: {
-        minHeight: '100vh',
         backgroundColor: '#eeeeee',
         padding: '10px'
     },
@@ -76,7 +75,7 @@ class TreeView extends Component {
         };
 
         // add dates first
-        let i, numberOfNodes = 0, dates = [];
+        let i, numberOfNodes = 10, dates = [];
 
         function addDateToTimeline(item) {
             let newDate = item.date;
@@ -95,9 +94,11 @@ class TreeView extends Component {
             dates.sort();
 
             if (searchResults) {
+                let sortedSearchResults = searchResults.slice();
+                sortedSearchResults.sort((a, b) => (a.title > b.title) ? 1 : -1);
                 let i;
-                for (i = 0; i < searchResults.length; i++) {
-                    let entity = searchResults[i];
+                for (i = 0; i < sortedSearchResults.length; i++) {
+                    let entity = sortedSearchResults[i];
                     let organizations = [];
                     let organizationsValue = getValueByDate(entity.attributes.organizations, dates[value]);
                     let title = getValueByDate(entity.attributes.titles, dates[value]);
@@ -106,7 +107,6 @@ class TreeView extends Component {
                         organizations = JSON.parse(organizationsValue);
                     }
                     if (title !== "" && !title.includes(" - Terminated on ")) {
-                        console.log(organizations ? organizations.length : 1);
                         numberOfNodes += organizations ? (organizations.length > 0 ? organizations.length : 1) : 0;
                         data.children.push({
                             title: entity.title,
