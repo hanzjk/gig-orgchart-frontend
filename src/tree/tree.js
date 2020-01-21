@@ -52,9 +52,9 @@ class TreeView extends Component {
             collapsed: [],
             treeHeight: 0,
             dates: [],
-            treeData: {
+            treeData:{
                 keyVal: "root",
-                name: 'Organization Chart',
+                name: '',
                 children: []
             },
         };
@@ -103,7 +103,7 @@ class TreeView extends Component {
             dates.sort();
         }
 
-        this.setState({dates: dates,value:dates.length-1});
+        this.setState({dates: dates, value: dates.length - 1});
     }
 
     generateTreeDataStructure() {
@@ -111,9 +111,9 @@ class TreeView extends Component {
         const {searchResults} = this.props;
         const {value, collapsed, dates} = this.state;
 
-        let data = {
+        let data ={
             keyVal: "root",
-            name: 'Organization Chart',
+            name: 'Government of Sri Lanka',
             children: []
         };
 
