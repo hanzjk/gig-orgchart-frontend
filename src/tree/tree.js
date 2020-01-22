@@ -52,7 +52,7 @@ class TreeView extends Component {
             collapsed: [],
             treeHeight: 0,
             dates: [],
-            treeData:{
+            treeData: {
                 keyVal: "root",
                 name: '',
                 children: []
@@ -98,6 +98,9 @@ class TreeView extends Component {
             for (i = 0; i < searchResults.length; i++) {
                 let entity = searchResults[i];
                 entity.attributes.organizations.forEach(addDateToTimeline);
+                if (entity.attributes.titles === undefined) {
+                    console.log(entity)
+                }
                 entity.attributes.titles.forEach(addDateToTimeline);
             }
             dates.sort();
@@ -111,7 +114,7 @@ class TreeView extends Component {
         const {searchResults} = this.props;
         const {value, collapsed, dates} = this.state;
 
-        let data ={
+        let data = {
             keyVal: "root",
             name: 'Government of Sri Lanka',
             children: []

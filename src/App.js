@@ -12,7 +12,7 @@ class App extends Component {
         super(props);
         this.state = {
             searchKey: "",
-            searchResults: [],
+            searchResults: null,
             loadedEntity: [],
             loading: true,
         };
