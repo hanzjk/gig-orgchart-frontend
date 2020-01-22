@@ -130,17 +130,17 @@ class TreeView extends Component {
                 let organizationsValue = getValueByDate(entity.attributes.organizations, dates[value]);
                 let title = getValueByDate(entity.attributes.titles, dates[value]);
 
-                if (organizationsValue !== "" && collapsed.includes(entity.title)) {
+                if (organizationsValue !== "" && organizationsValue !== "null" && collapsed.includes(entity.title)) {
                     organizations = JSON.parse(organizationsValue);
                 }
                 if (title !== "" && !title.includes(" - Terminated on ")) {
                     numberOfNodes += organizations ? organizations.length : 1;
-                    let childClass='node';
-                    if (collapsed.length>0){
-                        childClass="node node-inactive"
+                    let childClass = 'node';
+                    if (collapsed.length > 0) {
+                        childClass = "node node-inactive"
                     }
-                    if (organizations){
-                        childClass="node node-focused"
+                    if (organizations) {
+                        childClass = "node node-focused"
                     }
                     data.children.push({
                         title: entity.title,
@@ -165,7 +165,8 @@ class TreeView extends Component {
                                     if (index > -1) {
                                         collapseList.splice(index, 1);
                                     }
-                                } else {
+                                } else if (organizationsValue != "null") {
+                                    console.log(organizationsValue);
                                     collapseList.push(entity.title);
                                 }
                                 this.setState({collapsed: collapseList}, this.generateTreeDataStructure);
