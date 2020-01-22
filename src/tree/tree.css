@@ -13,7 +13,14 @@ svg.custom .node circle {
 }
 
 svg.custom .node text {
-  font-size: 11px;
+  font-size: 12px;
+  background-color: #444;
+  fill: #F4F4F4;
+  text-shadow: 0 1px 4px black;
+}
+
+svg.custom .node-big text {
+  font-size: 16px;
   background-color: #444;
   fill: #F4F4F4;
   text-shadow: 0 1px 4px black;

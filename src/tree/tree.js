@@ -135,6 +135,10 @@ class TreeView extends Component {
                 }
                 if (title !== "" && !title.includes(" - Terminated on ")) {
                     numberOfNodes += organizations ? organizations.length : 1;
+                    let childClass='node';
+                    if (organizations){
+                        childClass="node node-big"
+                    }
                     data.children.push({
                         title: entity.title,
                         keyVal: title,
@@ -143,10 +147,13 @@ class TreeView extends Component {
                             return {
                                 keyVal: title + link,
                                 name: link,
+                                gProps: {
+                                    className: childClass,
+                                }
                             }
                         }) : [],
                         gProps: {
-                            className: 'node',
+                            className: childClass,
                             onClick: (event, node) => {
                                 let collapseList = collapsed.slice();
                                 if (collapseList.includes(entity.title)) {
@@ -202,7 +209,7 @@ class TreeView extends Component {
                                 svgProps={{
                                     className: 'custom'
                                 }}
-                                margins={{bottom: 10, left: 20, right: 500, top: 10}}
+                                margins={{bottom: 20, left: 20, right: 500, top: 20}}
                                 animated
                                 keyProp={"keyVal"}
                             />
