@@ -5,8 +5,20 @@ div.custom-container {
 svg.custom{
   -webkit-transition: height 0.5s;
 }
-
 svg.custom .node circle {
+  fill: #F3F3FF;
+  stroke: #2593B8;
+  stroke-width: 1.5px;
+}
+
+svg.custom .node-inactive circle {
+  -webkit-transition: fill 0.5s;
+  fill: grey;
+  stroke: #2593B8;
+  stroke-width: 1.5px;
+}
+
+svg.custom .node-focused circle {
   fill: #F3F3FF;
   stroke: #2593B8;
   stroke-width: 1.5px;
@@ -19,7 +31,15 @@ svg.custom .node text {
   text-shadow: 0 1px 4px black;
 }
 
-svg.custom .node-big text {
+svg.custom .node-inactive text {
+  -webkit-transition: fill 0.5s;
+  font-size: 12px;
+  background-color: #444;
+  fill: grey;
+  text-shadow: 0 1px 4px black;
+}
+
+svg.custom .node-focused text {
   font-size: 16px;
   background-color: #444;
   fill: #F4F4F4;

@@ -136,8 +136,11 @@ class TreeView extends Component {
                 if (title !== "" && !title.includes(" - Terminated on ")) {
                     numberOfNodes += organizations ? organizations.length : 1;
                     let childClass='node';
+                    if (collapsed.length>0){
+                        childClass="node node-inactive"
+                    }
                     if (organizations){
-                        childClass="node node-big"
+                        childClass="node node-focused"
                     }
                     data.children.push({
                         title: entity.title,
