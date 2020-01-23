@@ -19,13 +19,9 @@ const styles = theme => ({
         paddingBottom: theme.spacing(2),
         color: 'white',
         textAlign: 'left',
-        margin: '10px',
+        margin: '-10px',
     },
-    container: {
-        backgroundColor: '#eeeeee',
-        padding: '10px'
-    },
-    searchResult: {
+    treeContainer: {
         ...theme.mixins.gutters(),
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
@@ -34,11 +30,9 @@ const styles = theme => ({
         margin: '10px',
         backgroundColor: '#242424',
     },
-    paragraph: {
-        margin: '15px 0'
-    },
-    link: {
-        paddingRight: '10px'
+    timeline: {
+        height: '70px',
+        margin: '10px'
     }
 });
 
@@ -165,7 +159,7 @@ class TreeView extends Component {
                                     if (index > -1) {
                                         collapseList.splice(index, 1);
                                     }
-                                } else if (organizationsValue != "null") {
+                                } else if (organizationsValue !== "null") {
                                     console.log(organizationsValue);
                                     collapseList.push(entity.title);
                                 }
@@ -179,7 +173,7 @@ class TreeView extends Component {
 
         }
 
-        this.setState({treeData: data, treeHeight: numberOfNodes * 15});
+        this.setState({treeData: data, treeHeight: numberOfNodes * 18});
     }
 
     render() {
@@ -193,7 +187,7 @@ class TreeView extends Component {
                         <Typography variant="h4" component="h4">
                             Organization Chart
                         </Typography>
-                        <div id="timeline" style={{height: '70px', margin: '10px'}}>
+                        <div id="timeline" className={classes.timeline}>
                             <HorizontalTimeline
                                 styles={{background: '#242424', foreground: '#2593B8', outline: '#dfdfdf'}}
                                 index={value}
@@ -204,20 +198,18 @@ class TreeView extends Component {
                                 values={dates}/>
                         </div>
                     </Paper>
-                    <Paper className={classes.searchResult} style={{paddingTop: '200px'}} elevation={1}>
-                        <div className="custom-container" style={{overflow: "auto"}}>
-                            <Tree
-                                data={treeData}
-                                height={treeHeight}
-                                width={1500}
-                                svgProps={{
-                                    className: 'custom'
-                                }}
-                                margins={{bottom: 20, left: 20, right: 500, top: 20}}
-                                animated
-                                keyProp={"keyVal"}
-                            />
-                        </div>
+                    <Paper className={classes.treeContainer} style={{paddingTop: '200px'}} elevation={1}>
+                        <Tree
+                            data={treeData}
+                            height={treeHeight}
+                            width={1500}
+                            svgProps={{
+                                className: 'custom'
+                            }}
+                            margins={{bottom: 20, left: 20, right: 500, top: 20}}
+                            animated
+                            keyProp={"keyVal"}
+                        />
                     </Paper>
                 </div>
             </div>
@@ -225,14 +217,8 @@ class TreeView extends Component {
     }
 }
 
-TreeView
-    .propTypes = {
+TreeView.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)
-
-(
-    TreeView
-)
-;
+export default withStyles(styles)(TreeView);
