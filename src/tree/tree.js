@@ -19,7 +19,7 @@ const styles = theme => ({
         paddingBottom: theme.spacing(2),
         color: 'white',
         textAlign: 'left',
-        margin: '-10px',
+        margin: '47px -10px -10px -10px',
     },
     treeContainer: {
         ...theme.mixins.gutters(),
@@ -184,9 +184,6 @@ class TreeView extends Component {
                 <div className="content">
                     <div className="custom-container">
                         <Paper className={classes.header} elevation={1}>
-                            <Typography variant="h4" component="h4">
-                                Organization Chart
-                            </Typography>
                             <div id="timeline" className={classes.timeline}>
                                 <HorizontalTimeline
                                     styles={{background: '#242424', foreground: '#2593B8', outline: '#dfdfdf'}}

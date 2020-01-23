@@ -4,7 +4,7 @@ import {
     HashRouter
 } from "react-router-dom";
 import './index.css';
-import Header from "./shared/header/header";
+import Header from "./shared/header";
 import TreeView from "./tree/tree";
 
 class App extends Component {
@@ -84,10 +84,9 @@ class App extends Component {
                 <HashRouter>
                     <Route path="/"
                            render={(props) => <Header {...props}
-                                                      searchResults={this.state.searchResults}
+                                                      loading={this.state.loading}
                            />}
                     />
-
                     <Route path="/"
                            render={(props) => <TreeView {...props}
                                                         searchKey={this.state.searchKey}
