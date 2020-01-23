@@ -130,16 +130,20 @@ class TreeView extends Component {
                 if (title !== "" && !title.includes(" - Terminated on ")) {
                     numberOfNodes += organizations ? organizations.length : 1;
                     let childClass = 'node';
+                    let pathClass ='link';
                     if (collapsed.length > 0) {
-                        childClass = "node node-inactive"
+                        childClass = "node node-inactive";
+                        pathClass ='link link-inactive';
                     }
                     if (organizations) {
-                        childClass = "node node-focused"
+                        childClass = "node node-focused";
+                        pathClass='link';
                     }
                     data.children.push({
                         title: entity.title,
                         keyVal: title,
                         name: title,
+                        pathProps: {className: pathClass},
                         children: organizations ? organizations.map((link) => {
                             return {
                                 keyVal: title + link,
