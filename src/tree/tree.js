@@ -177,43 +177,46 @@ class TreeView extends Component {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes,searchResults} = this.props;
         const {value, treeData, treeHeight, dates} = this.state;
-
-        return (
-            <div className="content">
-                <div className="custom-container">
-                    <Paper className={classes.header} elevation={1}>
-                        <Typography variant="h4" component="h4">
-                            Organization Chart
-                        </Typography>
-                        <div id="timeline" className={classes.timeline}>
-                            <HorizontalTimeline
-                                styles={{background: '#242424', foreground: '#2593B8', outline: '#dfdfdf'}}
-                                index={value}
-                                indexClick={(index) => {
-                                    console.log(index, dates[index]);
-                                    this.setState({value: index, previous: value}, this.generateTreeDataStructure);
+        if (searchResults) {
+            return (
+                <div className="content">
+                    <div className="custom-container">
+                        <Paper className={classes.header} elevation={1}>
+                            <Typography variant="h4" component="h4">
+                                Organization Chart
+                            </Typography>
+                            <div id="timeline" className={classes.timeline}>
+                                <HorizontalTimeline
+                                    styles={{background: '#242424', foreground: '#2593B8', outline: '#dfdfdf'}}
+                                    index={value}
+                                    indexClick={(index) => {
+                                        console.log(index, dates[index]);
+                                        this.setState({value: index, previous: value}, this.generateTreeDataStructure);
+                                    }}
+                                    values={dates}/>
+                            </div>
+                        </Paper>
+                        <Paper className={classes.treeContainer} style={{paddingTop: '200px'}} elevation={1}>
+                            <Tree
+                                data={treeData}
+                                height={treeHeight}
+                                width={1500}
+                                svgProps={{
+                                    className: 'custom'
                                 }}
-                                values={dates}/>
-                        </div>
-                    </Paper>
-                    <Paper className={classes.treeContainer} style={{paddingTop: '200px'}} elevation={1}>
-                        <Tree
-                            data={treeData}
-                            height={treeHeight}
-                            width={1500}
-                            svgProps={{
-                                className: 'custom'
-                            }}
-                            margins={{bottom: 20, left: 20, right: 500, top: 20}}
-                            animated
-                            keyProp={"keyVal"}
-                        />
-                    </Paper>
+                                margins={{bottom: 20, left: 20, right: 500, top: 20}}
+                                animated
+                                keyProp={"keyVal"}
+                            />
+                        </Paper>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }else{
+            return null
+        }
     }
 }
 

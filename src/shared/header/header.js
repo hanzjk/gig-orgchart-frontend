@@ -31,12 +31,8 @@ class Header extends Component {
                     </div>
                 </div>
             );
-        }else{
-            return(
-                <div>
-
-                </div>
-            )
+        } else {
+            return null
         }
     }
 }
