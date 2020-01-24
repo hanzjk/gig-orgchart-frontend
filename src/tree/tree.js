@@ -171,11 +171,13 @@ class TreeView extends Component {
 
                             },
                             children: shouldCollapse ? organizations.map((link) => {
+                                let shouldHighlight = childrenMatchingSearchKey.includes(link) || !childMatchingSearchKeyFound;
                                 return {
                                     keyVal: title + link,
                                     name: link,
+                                    pathProps: {className: shouldHighlight ? 'link' : 'link link-inactive'},
                                     gProps: {
-                                        className: childrenMatchingSearchKey.includes(link) || !childMatchingSearchKeyFound ? 'node node-focused' : 'node node-inactive',
+                                        className: shouldHighlight ? 'node node-focused' : 'node node-inactive',
                                     }
                                 }
                             }) : []

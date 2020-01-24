@@ -1,52 +1,53 @@
-svg.custom{
-  -webkit-transition: height 0.5s;
+svg.custom {
+    -webkit-transition: height 0.5s;
 }
+
 svg.custom .node circle {
-  fill: #F3F3FF;
-  stroke: #2593B8;
-  stroke-width: 1.5px;
+    fill: #F3F3FF;
+    stroke: #2593B8;
+    stroke-width: 1.5px;
 }
 
 svg.custom .node-inactive circle {
-  -webkit-transition: fill 0.5s;
-  fill: grey;
-  stroke: #2593B8;
-  stroke-width: 1.5px;
+    -webkit-transition: fill 0.5s;
+    fill: grey;
+    stroke: #2593B8;
+    stroke-width: 1.5px;
 }
 
 svg.custom .node-focused circle {
-  fill: #F3F3FF;
-  stroke: #2593B8;
-  stroke-width: 1.5px;
+    fill: #F3F3FF;
+    stroke: #2593B8;
+    stroke-width: 1.5px;
 }
 
 svg.custom .node text {
-  -webkit-transition: fill,font-size 0.5s;
-  font-size: 12px;
-  background-color: #444;
-  fill: #F4F4F4;
-  text-shadow: 0 1px 4px black;
+    -webkit-transition: fill, font-size 0.5s;
+    font-size: 12px;
+    background-color: #444;
+    fill: #F4F4F4;
+    text-shadow: 0 1px 4px black;
 }
 
 svg.custom .node-inactive text {
-  fill: grey;
+    fill: grey;
 }
 
 svg.custom .node-focused text {
-  font-size: 16px;
+    font-size: 16px;
 }
 
 svg.custom .node {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 svg.custom path.link {
-  -webkit-transition: stroke 0.5s;
-  fill: none;
-  stroke: #2593B8;
-  stroke-width: 1.5px;
+    -webkit-transition: stroke 0.5s;
+    fill: none;
+    stroke: #2593B8;
+    stroke-width: 1.5px;
 }
 
-svg.custom path.link-inactive{
-  stroke: rgba(37, 147, 184,0.2);
+svg.custom path.link-inactive {
+    stroke: rgba(37, 147, 184, 0.2);
 }
