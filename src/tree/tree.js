@@ -129,7 +129,7 @@ class TreeView extends Component {
                 }
                 let childrenMatchingSearchKey = arrayIncludesElementsIncluding(organizations, searchKeyLowerCase);
                 let childMatchingSearchKeyFound = childrenMatchingSearchKey.length > 0;
-                let shouldCollapse = organizations && entityCollapsed || childMatchingSearchKeyFound;
+                let shouldCollapse = (organizations && entityCollapsed) || childMatchingSearchKeyFound;
 
                 if (!searchKeyLowerCase || (searchKeyLowerCase && (title.toLowerCase().includes(searchKeyLowerCase) || childMatchingSearchKeyFound))) {
                     if (title !== "" && !title.includes(" - Terminated on ")) {
