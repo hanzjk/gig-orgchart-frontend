@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import Tree from 'react-tree-graph';
 import './tree.css'
 import HorizontalTimeline from 'react-horizontal-timeline';
-import {getValueByDate} from "../index";
+import {arrayIncludesElementsIncluding, getValueByDate} from "../index";
 
 const styles = theme => ({
     header: {
@@ -72,7 +72,6 @@ class TreeView extends Component {
         if (prevState.dates !== this.state.dates) {
             this.generateTreeDataStructure();
         }
-        console.log(this.props.searchKey);
         if (prevProps.searchKey !== this.props.searchKey) {
             this.generateTreeDataStructure();
         }
@@ -117,29 +116,35 @@ class TreeView extends Component {
             children: []
         };
 
-        let numberOfNodes = 10;
+        let numberOfNodes = 10, searchKeyLowerCase = searchKey && searchKey.length > 2 ? searchKey.toLowerCase() : null;
 
         if (searchResults) {
             let i, sortedSearchResults = searchResults.slice();
             sortedSearchResults.sort((a, b) => (a.title > b.title) ? 1 : -1);
             for (i = 0; i < sortedSearchResults.length; i++) {
+
                 let organizations = null, entity = sortedSearchResults[i];
                 let organizationsValue = getValueByDate(entity.attributes.organizations, dates[value]);
                 let title = getValueByDate(entity.attributes.titles, dates[value]);
+                let entityCollapsed = collapsed.includes(entity.title);
 
-                if (!searchKey || (searchKey && title.toLowerCase().includes(searchKey.toLowerCase()))) {
-                    if (organizationsValue !== "" && collapsed.includes(entity.title)) {
-                        organizations = JSON.parse(organizationsValue) || [];
-                    }
+                if (organizationsValue !== "") {
+                    organizations = JSON.parse(organizationsValue) || [];
+                }
+                let childrenMatchingSearchKey = arrayIncludesElementsIncluding(organizations, searchKeyLowerCase);
+                let childMatchingSearchKeyFound = childrenMatchingSearchKey.length > 0;
+                let shouldCollapse = organizations && entityCollapsed || childMatchingSearchKeyFound;
+
+                if (!searchKeyLowerCase || (searchKeyLowerCase && (title.toLowerCase().includes(searchKeyLowerCase) || childMatchingSearchKeyFound))) {
                     if (title !== "" && !title.includes(" - Terminated on ")) {
-                        numberOfNodes += organizations ? organizations.length : 1;
+                        numberOfNodes += shouldCollapse ? organizations.length : 1;
                         let childClass = 'node';
                         let pathClass = 'link';
                         if (collapsed.length > 0) {
                             childClass = "node node-inactive";
                             pathClass = 'link link-inactive';
                         }
-                        if (organizations) {
+                        if (shouldCollapse) {
                             childClass = "node node-focused";
                             pathClass = 'link';
                         }
@@ -148,15 +153,6 @@ class TreeView extends Component {
                             keyVal: title,
                             name: title,
                             pathProps: {className: pathClass},
-                            children: organizations ? organizations.map((link) => {
-                                return {
-                                    keyVal: title + link,
-                                    name: link,
-                                    gProps: {
-                                        className: childClass,
-                                    }
-                                }
-                            }) : [],
                             gProps: {
                                 className: childClass,
                                 onClick: (event, node) => {
@@ -173,7 +169,16 @@ class TreeView extends Component {
                                     this.setState({collapsed: collapseList}, this.generateTreeDataStructure);
                                 },
 
-                            }
+                            },
+                            children: shouldCollapse ? organizations.map((link) => {
+                                return {
+                                    keyVal: title + link,
+                                    name: link,
+                                    gProps: {
+                                        className: childrenMatchingSearchKey.includes(link) || !childMatchingSearchKeyFound ? 'node node-focused' : 'node node-inactive',
+                                    }
+                                }
+                            }) : []
                         })
                     }
                 }
