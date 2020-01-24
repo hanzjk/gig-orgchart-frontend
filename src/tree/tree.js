@@ -58,14 +58,10 @@ class TreeView extends Component {
     }
 
     componentDidMount() {
-        this.props.handleChange("searchKey", this.props.match.params.searchKey);
         this.props.getSearchResults("OrgChart:");
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.match.params.searchKey !== this.props.match.params.searchKey) {
-            this.props.getSearchResults("OrgChart:");
-        }
         if (prevProps.searchResults !== this.props.searchResults) {
             this.collectDatesForTimeline();
         }
