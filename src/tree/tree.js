@@ -116,7 +116,7 @@ class TreeView extends Component {
             children: []
         };
 
-        let numberOfNodes = 10, searchKeyLowerCase = searchKey && searchKey.length > 2 ? searchKey.toLowerCase() : null;
+        let numberOfNodes = 10, searchKeyLowerCase = searchKey ? searchKey.toLowerCase() : null;
 
         if (searchResults) {
             let i, sortedSearchResults = searchResults.slice();

@@ -82,10 +82,25 @@ class Header extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            searchText: 0,
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        this.props.handleChange('searchKey', this.state.searchText);
+    }
+
+    handleChange(key, value) {
+        this.setState({[key]: value});
     }
 
     render() {
-        const {classes, loading, searchKey} = this.props;
+        const {classes, loading} = this.props;
+        const {searchText} = this.state;
         if (loading) {  // view loader
             return (
                 <div className={classes.loaderContainer}>
@@ -103,22 +118,24 @@ class Header extends Component {
         } else { //view header
             return (
                 <Grid container className={classes.header} spacing={2}>
-                        <Grid container>
-                            <Typography variant="h4" component="h4">
-                                Organization Chart
-                            </Typography>
-                            <div className={classes.search}>
-                                    <InputBase
-                                        name="search"
-                                        placeholder="Search…"
-                                        value={searchKey||""}
-                                        onChange={(e) => this.props.handleChange("searchKey", e.target.value)}
-                                        classes={{
-                                            root: classes.inputRoot,
-                                            input: classes.inputInput,
-                                        }}
-                                    />
-                            </div>
+                    <Grid container>
+                        <Typography variant="h4" component="h4">
+                            Organization Chart
+                        </Typography>
+                        <div className={classes.search}>
+                            <form id="search-form" onSubmit={this.handleSubmit} noValidate autoComplete="off">
+                                <InputBase
+                                    name="search"
+                                    placeholder="Search…"
+                                    value={searchText}
+                                    onChange={(e) => this.handleChange("searchText", e.target.value)}
+                                    classes={{
+                                        root: classes.inputRoot,
+                                        input: classes.inputInput,
+                                    }}
+                                />
+                            </form>
+                        </div>
                     </Grid>
                 </Grid>
             )
