@@ -6,6 +6,7 @@ import {
 import './index.css';
 import Header from "./shared/header";
 import TreeView from "./tree/tree";
+import Sankey from "./sankey/sankey";
 
 class App extends Component {
 
@@ -89,8 +90,16 @@ class App extends Component {
                                                       handleChange={this.handleChange}
                            />}
                     />
-                    <Route path="/"
+                    <Route exact path="/"
                            render={(props) => <TreeView {...props}
+                                                        searchKey={this.state.searchKey}
+                                                        handleChange={this.handleChange}
+                                                        searchResults={this.state.searchResults}
+                                                        getSearchResults={this.getSearchResults}
+                           />}
+                    />
+                    <Route path="/sankey"
+                           render={(props) => <Sankey {...props}
                                                         searchKey={this.state.searchKey}
                                                         handleChange={this.handleChange}
                                                         searchResults={this.state.searchResults}
