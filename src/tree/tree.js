@@ -178,7 +178,10 @@ class TreeView extends Component {
                                     pathProps: {className: shouldHighlight ? 'link' : 'link link-inactive'},
                                     gProps: {
                                         className: shouldHighlight ? 'node node-focused' : 'node node-inactive',
-                                    }
+                                        onClick: (event, node) => {
+                                            this.props.handleChange('searchKey', link);
+                                        }
+                                    },
                                 }
                             }) : []
                         })
