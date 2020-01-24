@@ -85,6 +85,8 @@ class App extends Component {
                     <Route path="/"
                            render={(props) => <Header {...props}
                                                       loading={this.state.loading}
+                                                      searchKey={this.state.searchKey}
+                                                      handleChange={this.handleChange}
                            />}
                     />
                     <Route path="/"

@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 import {withStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tree from 'react-tree-graph';
@@ -73,6 +72,10 @@ class TreeView extends Component {
         if (prevState.dates !== this.state.dates) {
             this.generateTreeDataStructure();
         }
+        console.log(this.props.searchKey);
+        if (prevProps.searchKey !== this.props.searchKey) {
+            this.generateTreeDataStructure();
+        }
 
     }
 
@@ -105,7 +108,7 @@ class TreeView extends Component {
 
     generateTreeDataStructure() {
 
-        const {searchResults} = this.props;
+        const {searchResults, searchKey} = this.props;
         const {value, collapsed, dates} = this.state;
 
         let data = {
@@ -124,54 +127,55 @@ class TreeView extends Component {
                 let organizationsValue = getValueByDate(entity.attributes.organizations, dates[value]);
                 let title = getValueByDate(entity.attributes.titles, dates[value]);
 
-                if (organizationsValue !== "" && organizationsValue !== "null" && collapsed.includes(entity.title)) {
-                    organizations = JSON.parse(organizationsValue);
-                }
-                if (title !== "" && !title.includes(" - Terminated on ")) {
-                    numberOfNodes += organizations ? organizations.length : 1;
-                    let childClass = 'node';
-                    let pathClass ='link';
-                    if (collapsed.length > 0) {
-                        childClass = "node node-inactive";
-                        pathClass ='link link-inactive';
+                if (!searchKey || (searchKey && title.toLowerCase().includes(searchKey.toLowerCase()))) {
+                    if (organizationsValue !== "" && collapsed.includes(entity.title)) {
+                        organizations = JSON.parse(organizationsValue) || [];
                     }
-                    if (organizations) {
-                        childClass = "node node-focused";
-                        pathClass='link';
-                    }
-                    data.children.push({
-                        title: entity.title,
-                        keyVal: title,
-                        name: title,
-                        pathProps: {className: pathClass},
-                        children: organizations ? organizations.map((link) => {
-                            return {
-                                keyVal: title + link,
-                                name: link,
-                                gProps: {
-                                    className: childClass,
-                                }
-                            }
-                        }) : [],
-                        gProps: {
-                            className: childClass,
-                            onClick: (event, node) => {
-                                let collapseList = collapsed.slice();
-                                if (collapseList.includes(entity.title)) {
-                                    let index = collapseList.indexOf(entity.title);
-
-                                    if (index > -1) {
-                                        collapseList.splice(index, 1);
-                                    }
-                                } else if (organizationsValue !== "null") {
-                                    console.log(organizationsValue);
-                                    collapseList.push(entity.title);
-                                }
-                                this.setState({collapsed: collapseList}, this.generateTreeDataStructure);
-                            },
-
+                    if (title !== "" && !title.includes(" - Terminated on ")) {
+                        numberOfNodes += organizations ? organizations.length : 1;
+                        let childClass = 'node';
+                        let pathClass = 'link';
+                        if (collapsed.length > 0) {
+                            childClass = "node node-inactive";
+                            pathClass = 'link link-inactive';
                         }
-                    })
+                        if (organizations) {
+                            childClass = "node node-focused";
+                            pathClass = 'link';
+                        }
+                        data.children.push({
+                            title: entity.title,
+                            keyVal: title,
+                            name: title,
+                            pathProps: {className: pathClass},
+                            children: organizations ? organizations.map((link) => {
+                                return {
+                                    keyVal: title + link,
+                                    name: link,
+                                    gProps: {
+                                        className: childClass,
+                                    }
+                                }
+                            }) : [],
+                            gProps: {
+                                className: childClass,
+                                onClick: (event, node) => {
+                                    let collapseList = collapsed.slice();
+                                    if (collapseList.includes(entity.title)) {
+                                        let index = collapseList.indexOf(entity.title);
+
+                                        if (index > -1) {
+                                            collapseList.splice(index, 1);
+                                        }
+                                    } else {
+                                        collapseList.push(entity.title);
+                                    }
+                                    this.setState({collapsed: collapseList}, this.generateTreeDataStructure);
+                                },
+
+                            }
+                        })
+                    }
                 }
             }
 
@@ -181,7 +185,7 @@ class TreeView extends Component {
     }
 
     render() {
-        const {classes,searchResults} = this.props;
+        const {classes, searchResults} = this.props;
         const {value, treeData, treeHeight, dates} = this.state;
         if (searchResults) {
             return (
@@ -215,7 +219,7 @@ class TreeView extends Component {
                     </div>
                 </div>
             );
-        }else{
+        } else {
             return null
         }
     }
