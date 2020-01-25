@@ -16,7 +16,7 @@ const override = css`
 const styles = theme => ({
     header: {
         position: 'fixed',
-        top:0,
+        top: '10px',
         left: '10px',
         right: '10px',
         backgroundColor: 'rgba(36,36,36,0.8)',
