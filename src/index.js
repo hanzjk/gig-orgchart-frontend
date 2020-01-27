@@ -11,6 +11,11 @@ ReactDOM.render(<App/>, document.getElementById('root'));
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
+export function sortValues(values) {
+    let sortedValues = values;
+    sortedValues.sort((a, b) => (a.date < b.date) ? 1 : -1);
+    return sortedValues
+}
 
 export function getValueByDate(values, date) {
     // sort values by date
@@ -18,8 +23,7 @@ export function getValueByDate(values, date) {
         return ""
     }
 
-    let sortedValues = values;
-    sortedValues.sort((a, b) => (a.date < b.date) ? 1 : -1);
+    let sortedValues = sortValues(values);
     // pick the value with highest date lower than or equal to the given date
     let i;
     let selectedValue = "";
@@ -35,13 +39,13 @@ export function getValueByDate(values, date) {
 }
 
 export function arrayIncludesElementsIncluding(array, searchKey) {
-    if (!array){
+    if (!array) {
         return false
     }
-    let result=[];
+    let result = [];
     for (let i = 0; i < array.length; i++) {
         if (array[i].toLowerCase().includes(searchKey)) {
-           result.push(array[i]);
+            result.push(array[i]);
         }
     }
     return result;

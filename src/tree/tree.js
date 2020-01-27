@@ -7,7 +7,9 @@ import Popover from '@material-ui/core/Popover';
 import Tree from 'react-tree-graph';
 import './tree.css'
 import HorizontalTimeline from 'react-horizontal-timeline';
-import {arrayIncludesElementsIncluding, getValueByDate} from "../index";
+import {arrayIncludesElementsIncluding, getValueByDate, sortValues} from "../index";
+import {VerticalTimeline, VerticalTimelineElement} from 'react-vertical-timeline-component';
+import './timeline.css';
 
 const styles = theme => ({
     header: {
@@ -34,7 +36,7 @@ const styles = theme => ({
     timeline: {
         height: '70px',
         margin: '10px'
-    }
+    },
 });
 
 class TreeView extends Component {
@@ -53,7 +55,7 @@ class TreeView extends Component {
                 children: []
             },
             anchorEl: null,
-            open : false
+            open: false
         };
 
         this.generateTreeDataStructure = this.generateTreeDataStructure.bind(this);
@@ -64,11 +66,11 @@ class TreeView extends Component {
     }
 
     handleClick = event => {
-        this.setState({anchorEl: event.currentTarget, open:Boolean(event.currentTarget)});
+        this.setState({anchorEl: event.currentTarget, open: Boolean(event.currentTarget)});
     };
 
     handleClose = () => {
-        this.setState({anchorEl: null, open:Boolean(null)});
+        this.setState({anchorEl: null, open: Boolean(null)});
     };
 
     componentDidMount() {
@@ -211,8 +213,18 @@ class TreeView extends Component {
     }
 
     render() {
-        const {classes, searchResults} = this.props;
+        const {classes, searchResults, loadedEntity} = this.props;
         const {value, treeData, treeHeight, dates, anchorEl, open} = this.state;
+        let sortedParents = null;
+        if (loadedEntity) {
+            for (let i = 0; i < loadedEntity.attributes.length; i++) {
+                if (loadedEntity.attributes[i].name === "parent") {
+                    sortedParents = sortValues(loadedEntity.attributes[i].values);
+                    break;
+                }
+            }
+        }
+
         if (searchResults) {
             return (
                 <div className="content">
@@ -252,11 +264,25 @@ class TreeView extends Component {
                                 horizontal: 'center',
                             }}
                             transformOrigin={{
-                                vertical: 'top',
+                                vertical: 'bottom',
                                 horizontal: 'center',
                             }}
                         >
-                            <Typography className={classes.typography}>The content of the Popover.</Typography>
+                            <Typography variant="h5">{loadedEntity ? loadedEntity.title : ''}<br/><br/></Typography>
+                            <Typography>Parent:</Typography>
+                            <VerticalTimeline>
+                                {sortedParents ? sortedParents.map((parent) => (
+                                    <VerticalTimelineElement
+                                        className="vertical-timeline-element--work"
+                                        contentStyle={{background: 'rgb(33, 150, 243)', color: '#fff', fontSize: '10px'}}
+                                        contentArrowStyle={{borderRight: '7px solid  rgb(33, 150, 243)'}}
+                                        date={parent.date ? parent.date.split('T')[0] : ''}
+                                    >
+                                        <p>{parent.raw_value}</p>
+                                    </VerticalTimelineElement>
+                                )) : null}
+                            </VerticalTimeline>
+                            <Typography><br/>Last Updated: {loadedEntity ? loadedEntity.updated_at : ''}</Typography>
                         </Popover>
                     </div>
                 </div>

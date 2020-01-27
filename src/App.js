@@ -14,7 +14,7 @@ class App extends Component {
         this.state = {
             searchKey: "",
             searchResults: null,
-            loadedEntity: [],
+            loadedEntity: null,
             loading: true,
         };
 
@@ -96,6 +96,7 @@ class App extends Component {
                                                         searchResults={this.state.searchResults}
                                                         getSearchResults={this.getSearchResults}
                                                         getEntity={this.getEntity}
+                                                        loadedEntity={this.state.loadedEntity}
                            />}
                     />
                 </HashRouter>

@@ -51,3 +51,10 @@ svg.custom path.link {
 svg.custom path.link-inactive {
     stroke: rgba(37, 147, 184, 0.2);
 }
+
+.MuiPaper-root.MuiPopover-paper {
+    padding: 10px;
+    background-color: rgba(36, 36, 36, 0.95);
+    color:white;
+    border: #2593B8 1.5px solid;
+}
