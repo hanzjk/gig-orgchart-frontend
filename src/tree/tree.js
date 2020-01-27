@@ -52,12 +52,24 @@ class TreeView extends Component {
                 name: '',
                 children: []
             },
+            anchorEl: null,
+            open : false
         };
 
         this.generateTreeDataStructure = this.generateTreeDataStructure.bind(this);
         this.collectDatesForTimeline = this.collectDatesForTimeline.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.handleClose = this.handleClose.bind(this);
 
     }
+
+    handleClick = event => {
+        this.setState({anchorEl: event.currentTarget, open:Boolean(event.currentTarget)});
+    };
+
+    handleClose = () => {
+        this.setState({anchorEl: null, open:Boolean(null)});
+    };
 
     componentDidMount() {
         this.props.getSearchResults("OrgChart:");
@@ -183,6 +195,7 @@ class TreeView extends Component {
                                         onClick: (event, node) => {
                                             this.props.handleChange('searchKey', link);
                                             this.props.getEntity(link);
+                                            this.handleClick(event)
                                         }
                                     },
                                 }
@@ -199,7 +212,7 @@ class TreeView extends Component {
 
     render() {
         const {classes, searchResults} = this.props;
-        const {value, treeData, treeHeight, dates} = this.state;
+        const {value, treeData, treeHeight, dates, anchorEl, open} = this.state;
         if (searchResults) {
             return (
                 <div className="content">
@@ -229,22 +242,22 @@ class TreeView extends Component {
                                 keyProp={"keyVal"}
                             />
                         </Paper>
-                        {/*<Popover*/}
-                            {/*id={'popover'}*/}
-                            {/*open={open}*/}
-                            {/*anchorEl={anchor[0]}*/}
-                            {/*onClose={this.handleClose}*/}
-                            {/*anchorOrigin={{*/}
-                                {/*vertical: 'bottom',*/}
-                                {/*horizontal: 'center',*/}
-                            {/*}}*/}
-                            {/*transformOrigin={{*/}
-                                {/*vertical: 'top',*/}
-                                {/*horizontal: 'center',*/}
-                            {/*}}*/}
-                        {/*>*/}
-                            {/*<Typography className={classes.typography}>The content of the Popover.</Typography>*/}
-                        {/*</Popover>*/}
+                        <Popover
+                            id={'popover'}
+                            open={open}
+                            anchorEl={anchorEl}
+                            onClose={this.handleClose}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
+                        >
+                            <Typography className={classes.typography}>The content of the Popover.</Typography>
+                        </Popover>
                     </div>
                 </div>
             );
