@@ -152,17 +152,21 @@ class TreeView extends Component {
                             gProps: {
                                 className: childClass,
                                 onClick: (event, node) => {
-                                    let collapseList = collapsed.slice();
-                                    if (collapseList.includes(entity.title)) {
-                                        let index = collapseList.indexOf(entity.title);
+                                    if (searchKey!==''){
+                                        this.props.handleChange('searchKey', '');
+                                    }else {
+                                        let collapseList = collapsed.slice();
+                                        if (collapseList.includes(entity.title)) {
+                                            let index = collapseList.indexOf(entity.title);
 
-                                        if (index > -1) {
-                                            collapseList.splice(index, 1);
+                                            if (index > -1) {
+                                                collapseList.splice(index, 1);
+                                            }
+                                        } else {
+                                            collapseList.push(entity.title);
                                         }
-                                    } else {
-                                        collapseList.push(entity.title);
+                                        this.setState({collapsed: collapseList}, this.generateTreeDataStructure);
                                     }
-                                    this.setState({collapsed: collapseList}, this.generateTreeDataStructure);
                                 },
 
                             },
