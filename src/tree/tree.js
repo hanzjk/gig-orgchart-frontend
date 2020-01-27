@@ -273,9 +273,10 @@ class TreeView extends Component {
                             <VerticalTimeline>
                                 {sortedParents ? sortedParents.map((parent) => (
                                     <VerticalTimelineElement
+                                        key={parent.date}
                                         className="vertical-timeline-element--work"
-                                        contentStyle={{background: 'rgb(33, 150, 243)', color: '#fff', fontSize: '10px'}}
-                                        contentArrowStyle={{borderRight: '7px solid  rgb(33, 150, 243)'}}
+                                        contentStyle={{background: '#3fb3d9', color: '#fff', fontSize: '10px'}}
+                                        contentArrowStyle={{borderRight: '7px solid  #2593b8'}}
                                         date={parent.date ? parent.date.split('T')[0] : ''}
                                     >
                                         <p>{parent.raw_value}</p>
