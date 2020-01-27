@@ -63,7 +63,7 @@ class App extends Component {
     }
 
     getEntity(title) {
-        this.startLoading();
+        // this.startLoading();
         fetch(process.env.REACT_APP_SERVER_URL + 'api/get/' + title, {
             method: 'GET'
         }).then(results => {
@@ -95,6 +95,7 @@ class App extends Component {
                                                         handleChange={this.handleChange}
                                                         searchResults={this.state.searchResults}
                                                         getSearchResults={this.getSearchResults}
+                                                        getEntity={this.getEntity}
                            />}
                     />
                 </HashRouter>

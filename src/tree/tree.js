@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Popover from '@material-ui/core/Popover';
 import Tree from 'react-tree-graph';
 import './tree.css'
 import HorizontalTimeline from 'react-horizontal-timeline';
@@ -152,9 +154,9 @@ class TreeView extends Component {
                             gProps: {
                                 className: childClass,
                                 onClick: (event, node) => {
-                                    if (searchKey!==''){
+                                    if (searchKey !== '') {
                                         this.props.handleChange('searchKey', '');
-                                    }else {
+                                    } else {
                                         let collapseList = collapsed.slice();
                                         if (collapseList.includes(entity.title)) {
                                             let index = collapseList.indexOf(entity.title);
@@ -180,6 +182,7 @@ class TreeView extends Component {
                                         className: shouldHighlight ? 'node node-focused' : 'node node-inactive',
                                         onClick: (event, node) => {
                                             this.props.handleChange('searchKey', link);
+                                            this.props.getEntity(link);
                                         }
                                     },
                                 }
@@ -226,6 +229,22 @@ class TreeView extends Component {
                                 keyProp={"keyVal"}
                             />
                         </Paper>
+                        {/*<Popover*/}
+                            {/*id={'popover'}*/}
+                            {/*open={open}*/}
+                            {/*anchorEl={anchor[0]}*/}
+                            {/*onClose={this.handleClose}*/}
+                            {/*anchorOrigin={{*/}
+                                {/*vertical: 'bottom',*/}
+                                {/*horizontal: 'center',*/}
+                            {/*}}*/}
+                            {/*transformOrigin={{*/}
+                                {/*vertical: 'top',*/}
+                                {/*horizontal: 'center',*/}
+                            {/*}}*/}
+                        {/*>*/}
+                            {/*<Typography className={classes.typography}>The content of the Popover.</Typography>*/}
+                        {/*</Popover>*/}
                     </div>
                 </div>
             );
