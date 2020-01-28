@@ -67,8 +67,8 @@ class TreeView extends Component {
 
     }
 
-    handleClick = event => {
-        this.setState({anchorEl: event.currentTarget, open: true});
+    handleClick = eventTarget => {
+        this.setState({anchorEl: eventTarget, open: true});
     };
 
     handleClose = () => {
@@ -202,7 +202,8 @@ class TreeView extends Component {
                                         className: shouldHighlight ? 'node node-focused' : 'node node-inactive',
                                         onClick: (event, node) => {
                                             this.props.handleChange('searchKey', link);
-                                            this.props.getEntity(link, (e)=>this.handleClick(event));
+                                            let eventTarget=event.currentTarget;
+                                            this.props.getEntity(link, (e)=>this.handleClick(eventTarget));
                                         }
                                     },
                                 }
@@ -265,6 +266,7 @@ class TreeView extends Component {
                             />
                         </Paper>
                         <Popover
+                            style={{maxHeight:'80%'}}
                             id={'popover'}
                             open={open}
                             anchorEl={anchorEl}

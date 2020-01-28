@@ -73,9 +73,8 @@ class App extends Component {
             return null
         }).then(data => {
             this.handleChange("loadedEntity", data);
+            callback();
         }).then(
-            callback()
-        ).then(
             end => this.endLoading()
         )
     }
