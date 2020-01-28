@@ -55,22 +55,24 @@ class TreeView extends Component {
                 children: []
             },
             anchorEl: null,
-            open: false
+            open: false,
+            sortedParents: null
         };
 
         this.generateTreeDataStructure = this.generateTreeDataStructure.bind(this);
         this.collectDatesForTimeline = this.collectDatesForTimeline.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.setSortedParents = this.setSortedParents.bind(this);
 
     }
 
     handleClick = event => {
-        this.setState({anchorEl: event.currentTarget, open: Boolean(event.currentTarget)});
+        this.setState({anchorEl: event.currentTarget, open: true});
     };
 
     handleClose = () => {
-        this.setState({anchorEl: null, open: Boolean(null)});
+        this.setState({anchorEl: null, open: false});
     };
 
     componentDidMount() {
@@ -86,6 +88,10 @@ class TreeView extends Component {
         }
         if (prevProps.searchKey !== this.props.searchKey) {
             this.generateTreeDataStructure();
+        }
+
+        if (prevProps.loadedEntity !== this.props.loadedEntity) {
+            this.setSortedParents();
         }
 
     }
@@ -196,8 +202,7 @@ class TreeView extends Component {
                                         className: shouldHighlight ? 'node node-focused' : 'node node-inactive',
                                         onClick: (event, node) => {
                                             this.props.handleChange('searchKey', link);
-                                            this.props.getEntity(link);
-                                            this.handleClick(event)
+                                            this.props.getEntity(link, (e)=>this.handleClick(event));
                                         }
                                     },
                                 }
@@ -212,9 +217,8 @@ class TreeView extends Component {
         this.setState({treeData: data, treeHeight: numberOfNodes * 18});
     }
 
-    render() {
-        const {classes, searchResults, loadedEntity} = this.props;
-        const {value, treeData, treeHeight, dates, anchorEl, open} = this.state;
+    setSortedParents() {
+        const {loadedEntity} = this.props;
         let sortedParents = null;
         if (loadedEntity) {
             for (let i = 0; i < loadedEntity.attributes.length; i++) {
@@ -224,6 +228,12 @@ class TreeView extends Component {
                 }
             }
         }
+        this.setState({sortedParents: sortedParents});
+    }
+
+    render() {
+        const {classes, searchResults, loadedEntity} = this.props;
+        const {value, treeData, treeHeight, dates, anchorEl, open, sortedParents} = this.state;
 
         if (searchResults) {
             return (
@@ -270,19 +280,21 @@ class TreeView extends Component {
                         >
                             <Typography variant="h5">{loadedEntity ? loadedEntity.title : ''}<br/><br/></Typography>
                             <Typography>Parent:</Typography>
-                            <VerticalTimeline>
-                                {sortedParents ? sortedParents.map((parent) => (
-                                    <VerticalTimelineElement
-                                        key={parent.date}
-                                        className="vertical-timeline-element--work"
-                                        contentStyle={{background: '#3fb3d9', color: '#fff', fontSize: '10px'}}
-                                        contentArrowStyle={{borderRight: '7px solid  #2593b8'}}
-                                        date={parent.date ? parent.date.split('T')[0] : ''}
-                                    >
-                                        <p>{parent.raw_value}</p>
-                                    </VerticalTimelineElement>
-                                )) : null}
-                            </VerticalTimeline>
+                            {sortedParents ?
+                                <VerticalTimeline>
+                                    {sortedParents ? sortedParents.map((parent) => (
+                                        <VerticalTimelineElement
+                                            key={parent.date}
+                                            className="vertical-timeline-element--work"
+                                            contentStyle={{background: '#3fb3d9', color: '#fff', fontSize: '10px'}}
+                                            contentArrowStyle={{borderRight: '7px solid  #2593b8'}}
+                                            date={parent.date ? parent.date.split('T')[0] : ''}
+                                        >
+                                            <p>{parent.raw_value}</p>
+                                        </VerticalTimelineElement>
+                                    )) : null}
+                                </VerticalTimeline>
+                                : null}
                             <Typography><br/>Last Updated: {loadedEntity ? loadedEntity.updated_at : ''}</Typography>
                         </Popover>
                     </div>
