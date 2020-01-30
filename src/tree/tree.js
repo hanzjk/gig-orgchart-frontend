@@ -174,21 +174,21 @@ class TreeView extends Component {
                             gProps: {
                                 className: childClass,
                                 onClick: (event, node) => {
-                                    if (searchKey !== '') {
-                                        this.props.handleChange('searchKey', '');
-                                    } else {
-                                        let collapseList = collapsed.slice();
-                                        if (collapseList.includes(entity.title)) {
+                                    let collapseList = collapsed.slice();
+                                    if (collapseList.includes(entity.title)) {
+                                        if (searchKey !== '') {
+                                            this.props.handleChange('searchKey', '');
+                                        } else {
                                             let index = collapseList.indexOf(entity.title);
 
                                             if (index > -1) {
                                                 collapseList.splice(index, 1);
                                             }
-                                        } else {
-                                            collapseList.push(entity.title);
                                         }
-                                        this.setState({collapsed: collapseList}, this.generateTreeDataStructure);
+                                    } else {
+                                        collapseList.push(entity.title);
                                     }
+                                    this.setState({collapsed: collapseList}, this.generateTreeDataStructure);
                                 },
 
                             },
@@ -202,8 +202,8 @@ class TreeView extends Component {
                                         className: shouldHighlight ? 'node node-focused' : 'node node-inactive',
                                         onClick: (event, node) => {
                                             this.props.handleChange('searchKey', link);
-                                            let eventTarget=event.currentTarget;
-                                            this.props.getEntity(link, (e)=>this.handleClick(eventTarget));
+                                            let eventTarget = event.currentTarget;
+                                            this.props.getEntity(link, (e) => this.handleClick(eventTarget));
                                         }
                                     },
                                 }
@@ -266,7 +266,7 @@ class TreeView extends Component {
                             />
                         </Paper>
                         <Popover
-                            style={{maxHeight:'80%'}}
+                            style={{maxHeight: '80%'}}
                             id={'popover'}
                             open={open}
                             anchorEl={anchorEl}
