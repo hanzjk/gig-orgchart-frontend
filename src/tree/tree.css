@@ -31,6 +31,7 @@ svg.custom .node text {
 
 svg.custom .node-inactive text {
     fill: grey;
+    font-size: 8px;
 }
 
 svg.custom .node-focused text {
