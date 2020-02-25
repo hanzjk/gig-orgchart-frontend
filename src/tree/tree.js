@@ -292,7 +292,7 @@ class TreeView extends Component {
                                             contentArrowStyle={{borderRight: '7px solid  #2593b8'}}
                                             date={parent.date ? parent.date.split('T')[0] : ''}
                                         >
-                                            <p>{parent.raw_value}</p>
+                                            <p>{parent.value_string}</p>
                                         </VerticalTimelineElement>
                                     )) : null}
                                 </VerticalTimeline>

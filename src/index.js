@@ -30,7 +30,7 @@ export function getValueByDate(values, date) {
     for (i = 0; i < sortedValues.length; i++) {
 
         if (sortedValues[i].date <= date) {
-            selectedValue = sortedValues[i].raw_value;
+            selectedValue = sortedValues[i].value_string;
             break
         }
     }
