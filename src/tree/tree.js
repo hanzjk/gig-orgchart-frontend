@@ -111,11 +111,11 @@ class TreeView extends Component {
         if (searchResults) {
             for (i = 0; i < searchResults.length; i++) {
                 let entity = searchResults[i];
-                entity.attributes.organizations.forEach(addDateToTimeline);
+                entity.attributes.organizations.values.forEach(addDateToTimeline);
                 if (entity.attributes.titles === undefined) {
                     console.log(entity)
                 }
-                entity.attributes.titles.forEach(addDateToTimeline);
+                entity.attributes.titles.values.forEach(addDateToTimeline);
             }
             dates.sort();
         }
@@ -142,8 +142,8 @@ class TreeView extends Component {
             for (i = 0; i < sortedSearchResults.length; i++) {
 
                 let organizations = null, entity = sortedSearchResults[i];
-                let organizationsValue = getValueByDate(entity.attributes.organizations, dates[value]);
-                let title = getValueByDate(entity.attributes.titles, dates[value]);
+                let organizationsValue = getValueByDate(entity.attributes.organizations.values, dates[value]);
+                let title = getValueByDate(entity.attributes.titles.values, dates[value]);
                 let entityCollapsed = collapsed.includes(entity.title);
 
                 if (organizationsValue !== "") {
@@ -221,14 +221,10 @@ class TreeView extends Component {
     setSortedParents() {
         const {loadedEntity} = this.props;
         let sortedParents = null;
-        if (loadedEntity) {
-            for (let i = 0; i < loadedEntity.attributes.length; i++) {
-                if (loadedEntity.attributes[i].name === "parent") {
-                    sortedParents = sortValues(loadedEntity.attributes[i].values);
-                    break;
-                }
-            }
+        if (loadedEntity && loadedEntity.attributes.parent) {
+            sortedParents = sortValues(loadedEntity.attributes.parent.values);
         }
+
         this.setState({sortedParents: sortedParents});
     }
 
