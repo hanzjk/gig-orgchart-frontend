@@ -81,6 +81,8 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    -webkit-transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
 }
 
 .vertical-timeline-element-icon svg {
@@ -103,11 +105,6 @@
         margin-top: 20px;
         margin-left: -8.5px
     }
-}
-
-.vertical-timeline-element-icon {
-    -webkit-transform: translateZ(0);
-    -webkit-backface-visibility: hidden
 }
 
 .vertical-timeline--animate .vertical-timeline-element-icon.is-hidden {
@@ -199,14 +196,18 @@
     color: #303e49
 }
 
-.vertical-timeline-element-content .vertical-timeline-element-date, .vertical-timeline-element-content p {
+.vertical-timeline-element-content p {
     font-size: 13px;
-    font-size: .8125rem;
     font-weight: 500
 }
 
 .vertical-timeline-element-content .vertical-timeline-element-date {
-    display: inline-block
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 500;
+    float: left;
+    padding: .8em 0;
+    opacity: .7;
 }
 
 .vertical-timeline-element-content p {
@@ -220,12 +221,6 @@
 
 .vertical-timeline-element-subtitle {
     margin: 0
-}
-
-.vertical-timeline-element-content .vertical-timeline-element-date {
-    float: left;
-    padding: .8em 0;
-    opacity: .7
 }
 
 .vertical-timeline-element-content-arrow {

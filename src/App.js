@@ -63,7 +63,7 @@ class App extends Component {
     }
 
     getEntity(title, callback) {
-        // this.startLoading();
+        this.startLoading();
         fetch(process.env.REACT_APP_SERVER_URL + 'api/get/' + title, {
             method: 'GET'
         }).then(results => {

@@ -2,14 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<App/>, document.getElementById('root'));
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
 
 export function sortValues(values) {
     let sortedValues = values;
@@ -27,11 +21,10 @@ export function getValueByDate(values, date) {
     // pick the value with highest date lower than or equal to the given date
     let i;
     let selectedValue = "";
-    for (i = 0; i < sortedValues.length; i++) {
+    for (let sortedValue of sortedValues) {
 
-        if (sortedValues[i].date <= date) {
-            selectedValue = sortedValues[i].value_string;
-            break
+        if (sortedValue.date <= date) {
+            return sortedValue?.value_string;
         }
     }
     //return the raw
@@ -40,12 +33,12 @@ export function getValueByDate(values, date) {
 
 export function arrayIncludesElementsIncluding(array, searchKey) {
     if (!array) {
-        return false
+        return null
     }
     let result = [];
-    for (let i = 0; i < array.length; i++) {
-        if (array[i].toLowerCase().includes(searchKey)) {
-            result.push(array[i]);
+    for (let item of array) {
+        if (item.toLowerCase().includes(searchKey)) {
+            result.push(item);
         }
     }
     return result;
