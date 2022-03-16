@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
-import {
-    Route,
-    HashRouter
-} from "react-router-dom";
+import {HashRouter, Route} from "react-router-dom";
 import './index.css';
 import Header from "./shared/header";
 import TreeView from "./tree/tree";

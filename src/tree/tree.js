@@ -7,9 +7,10 @@ import Popover from '@material-ui/core/Popover';
 import Tree from 'react-tree-graph';
 import './tree.css'
 import HorizontalTimeline from 'react-horizontal-timeline';
-import {arrayIncludesElementsIncluding, getValueByDate, sortValues} from "../index";
+import {sortValues} from "../index";
 import {VerticalTimeline, VerticalTimelineElement} from 'react-vertical-timeline-component';
 import './timeline.css';
+import {generateTreeDataStructure} from "./functions/generate_tree_data_structure";
 
 const styles = theme => ({
     header: {
@@ -59,7 +60,7 @@ class TreeView extends Component {
             sortedParents: null
         };
 
-        this.generateTreeDataStructure = this.generateTreeDataStructure.bind(this);
+        this.generateDataStructure = this.generateDataStructure.bind(this);
         this.collectDatesForTimeline = this.collectDatesForTimeline.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -84,16 +85,21 @@ class TreeView extends Component {
             this.collectDatesForTimeline();
         }
         if (prevState.dates !== this.state.dates) {
-            this.generateTreeDataStructure();
+            this.generateDataStructure();
         }
         if (prevProps.searchKey !== this.props.searchKey) {
-            this.generateTreeDataStructure();
+            this.generateDataStructure();
         }
 
         if (prevProps.loadedEntity !== this.props.loadedEntity) {
             this.setSortedParents();
         }
 
+    }
+
+    generateDataStructure() {
+        const stateObj = generateTreeDataStructure(this.props, this.state);
+        this.setState(stateObj);
     }
 
     collectDatesForTimeline() {
@@ -122,102 +128,6 @@ class TreeView extends Component {
         this.setState({dates: dates, value: dates.length - 1});
     }
 
-    generateTreeDataStructure() {
-
-        const {searchResults, searchKey} = this.props;
-        const {value, collapsed, dates} = this.state;
-
-        let data = {
-            keyVal: "root",
-            name: 'Government of Sri Lanka',
-            children: []
-        };
-
-        let numberOfNodes = 10;
-        let searchKeyLowerCase = searchKey ? searchKey.toLowerCase() : null;
-
-        if (searchResults) {
-            let sortedSearchResults = searchResults.slice();
-            sortedSearchResults?.sort((a, b) => (a.title > b.title) ? 1 : -1);
-            for (let entity of sortedSearchResults){
-
-                let organizations = null;
-                let organizationsValue = getValueByDate(entity?.attributes?.organizations?.values, dates[value]);
-                let title = getValueByDate(entity?.attributes?.titles?.values, dates[value]);
-                let entityCollapsed = collapsed.includes(entity.title);
-
-                if (organizationsValue !== "") {
-                    organizations = JSON.parse(organizationsValue) || [];
-                }
-                let childrenMatchingSearchKey = arrayIncludesElementsIncluding(organizations, searchKeyLowerCase);
-                let childMatchingSearchKeyFound = childrenMatchingSearchKey.length > 0;
-                let shouldCollapse = (organizations && entityCollapsed) || childMatchingSearchKeyFound;
-
-                if (!searchKeyLowerCase || (searchKeyLowerCase && (title.toLowerCase().includes(searchKeyLowerCase) || childMatchingSearchKeyFound))) {
-                    if (title !== "" && !title.includes(" - Terminated on ")) {
-                        numberOfNodes += shouldCollapse ? organizations.length : 1;
-                        let childClass = 'node';
-                        let pathClass = 'link';
-                        if (collapsed.length > 0) {
-                            childClass = "node node-inactive";
-                            pathClass = 'link link-inactive';
-                        }
-                        if (shouldCollapse) {
-                            childClass = "node node-focused";
-                            pathClass = 'link';
-                        }
-                        data.children.push({
-                            title: entity.title,
-                            keyVal: title,
-                            name: title,
-                            pathProps: {className: pathClass},
-                            gProps: {
-                                className: childClass,
-                                onClick: (event, node) => {
-                                    let collapseList = collapsed.slice();
-                                    if (collapseList.includes(entity.title)) {
-                                        if (searchKey !== '') {
-                                            this.props.handleChange('searchKey', '');
-                                        } else {
-                                            let index = collapseList.indexOf(entity.title);
-
-                                            if (index > -1) {
-                                                collapseList.splice(index, 1);
-                                            }
-                                        }
-                                    } else {
-                                        collapseList.push(entity.title);
-                                    }
-                                    this.setState({collapsed: collapseList}, this.generateTreeDataStructure);
-                                },
-
-                            },
-                            children: shouldCollapse ? organizations.map((link) => {
-                                let shouldHighlight = childrenMatchingSearchKey.includes(link) || !childMatchingSearchKeyFound;
-                                return {
-                                    keyVal: title + link,
-                                    name: link,
-                                    pathProps: {className: shouldHighlight ? 'link' : 'link link-inactive'},
-                                    gProps: {
-                                        className: shouldHighlight ? 'node node-focused' : 'node node-inactive',
-                                        onClick: (event, node) => {
-                                            this.props.handleChange('searchKey', link);
-                                            let eventTarget = event.currentTarget;
-                                            this.props.getEntity(link, (e) => this.handleClick(eventTarget));
-                                        }
-                                    },
-                                }
-                            }) : []
-                        })
-                    }
-                }
-            }
-
-        }
-
-        this.setState({treeData: data, treeHeight: numberOfNodes * 18});
-    }
-
     setSortedParents() {
         const {loadedEntity} = this.props;
         let sortedParents = null;
@@ -243,7 +153,7 @@ class TreeView extends Component {
                                     index={value}
                                     indexClick={(index) => {
                                         console.log(index, dates[index]);
-                                        this.setState({value: index, previous: value}, this.generateTreeDataStructure);
+                                        this.setState({value: index, previous: value}, this.generateDataStructure);
                                     }}
                                     values={dates}/>
                             </div>
