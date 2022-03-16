@@ -99,7 +99,7 @@ class TreeView extends Component {
     collectDatesForTimeline() {
         const {searchResults} = this.props;
 
-        let i, dates = [];
+        let dates = [];
 
         function addDateToTimeline(item) {
             let newDate = item.date;
@@ -133,10 +133,11 @@ class TreeView extends Component {
             children: []
         };
 
-        let numberOfNodes = 10, searchKeyLowerCase = searchKey ? searchKey.toLowerCase() : null;
+        let numberOfNodes = 10;
+        let searchKeyLowerCase = searchKey ? searchKey.toLowerCase() : null;
 
         if (searchResults) {
-            let i, sortedSearchResults = searchResults.slice();
+            let sortedSearchResults = searchResults.slice();
             sortedSearchResults?.sort((a, b) => (a.title > b.title) ? 1 : -1);
             for (let entity of sortedSearchResults){
 
