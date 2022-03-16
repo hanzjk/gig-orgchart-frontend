@@ -19,7 +19,6 @@ export function getValueByDate(values, date) {
 
     let sortedValues = sortValues(values);
     // pick the value with highest date lower than or equal to the given date
-    let i;
     let selectedValue = "";
     for (let sortedValue of sortedValues) {
 

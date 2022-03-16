@@ -109,13 +109,12 @@ class TreeView extends Component {
         }
 
         if (searchResults) {
-            for (i = 0; i < searchResults.length; i++) {
-                let entity = searchResults[i];
-                entity.attributes.organizations.values.forEach(addDateToTimeline);
-                if (entity.attributes.titles === undefined) {
+            for (let entity of searchResults) {
+                entity?.attributes?.organizations?.values?.forEach(addDateToTimeline);
+                if (!entity?.attributes?.titles) {
                     console.log(entity)
                 }
-                entity.attributes.titles.values.forEach(addDateToTimeline);
+                entity?.attributes?.titles?.values?.forEach(addDateToTimeline);
             }
             dates.sort();
         }
@@ -138,12 +137,12 @@ class TreeView extends Component {
 
         if (searchResults) {
             let i, sortedSearchResults = searchResults.slice();
-            sortedSearchResults.sort((a, b) => (a.title > b.title) ? 1 : -1);
-            for (i = 0; i < sortedSearchResults.length; i++) {
+            sortedSearchResults?.sort((a, b) => (a.title > b.title) ? 1 : -1);
+            for (let entity of sortedSearchResults){
 
-                let organizations = null, entity = sortedSearchResults[i];
-                let organizationsValue = getValueByDate(entity.attributes.organizations.values, dates[value]);
-                let title = getValueByDate(entity.attributes.titles.values, dates[value]);
+                let organizations = null;
+                let organizationsValue = getValueByDate(entity?.attributes?.organizations?.values, dates[value]);
+                let title = getValueByDate(entity?.attributes?.titles?.values, dates[value]);
                 let entityCollapsed = collapsed.includes(entity.title);
 
                 if (organizationsValue !== "") {
@@ -221,7 +220,7 @@ class TreeView extends Component {
     setSortedParents() {
         const {loadedEntity} = this.props;
         let sortedParents = null;
-        if (loadedEntity && loadedEntity.attributes.parent) {
+        if (loadedEntity?.attributes?.parent) {
             sortedParents = sortValues(loadedEntity.attributes.parent.values);
         }
 
@@ -276,30 +275,29 @@ class TreeView extends Component {
                                 horizontal: 'center',
                             }}
                         >
-                            <Typography variant="h5">{loadedEntity ? loadedEntity.title : ''}<br/><br/></Typography>
+                            <Typography variant="h5">{loadedEntity?.title}<br/><br/></Typography>
                             <Typography>Parent:</Typography>
-                            {sortedParents ?
-                                <VerticalTimeline>
-                                    {sortedParents ? sortedParents.map((parent) => (
-                                        <VerticalTimelineElement
-                                            key={parent.date}
-                                            className="vertical-timeline-element--work"
-                                            contentStyle={{background: '#3fb3d9', color: '#fff', fontSize: '10px'}}
-                                            contentArrowStyle={{borderRight: '7px solid  #2593b8'}}
-                                            date={parent.date ? parent.date.split('T')[0] : ''}
-                                        >
-                                            <p>{parent.value_string}</p>
-                                        </VerticalTimelineElement>
-                                    )) : null}
-                                </VerticalTimeline>
-                                : null}
-                            <Typography><br/>Last Updated: {loadedEntity ? loadedEntity.updated_at : ''}</Typography>
+                            {sortedParents &&
+                            <VerticalTimeline>
+                                {sortedParents?.map((parent) => (
+                                    <VerticalTimelineElement
+                                        key={parent.date}
+                                        className="vertical-timeline-element--work"
+                                        contentStyle={{background: '#3fb3d9', color: '#fff', fontSize: '10px'}}
+                                        contentArrowStyle={{borderRight: '7px solid  #2593b8'}}
+                                        date={parent?.date?.split('T')[0]}
+                                    >
+                                        <p>{parent.value_string}</p>
+                                    </VerticalTimelineElement>
+                                ))}
+                            </VerticalTimeline>}
+                            <Typography><br/>Last Updated: {loadedEntity?.updated_at}</Typography>
                         </Popover>
                     </div>
                 </div>
             );
         } else {
-            return null
+            return <div/>
         }
     }
 }
