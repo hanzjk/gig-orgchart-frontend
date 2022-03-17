@@ -1,36 +1,22 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useCallback} from "react";
 import {withStyles} from '@mui/styles';
 import {AnimatedTree} from 'react-tree-graph';
 import './tree.css'
 import HorizontalTimeline from 'react-horizontal-timeline';
-import {getValueByDate} from "../helpers/getValueByDate";
 import './timeline.css';
 import {styles} from "./styles";
-import {arrayIncludesElementsIncluding} from "../helpers/arrayIncludesElementsIncluding";
 import {collectDatesForTimeline} from "./functions/collectDatesForTimeline";
 import PopWindow from "./pop_window/PopWindow";
-import {addNodeChildren} from "../functions/addNodeChildren";
-import {handleNodeClick} from "../functions/handleNodeClick";
-import {isChildMatchingSearchKeyFound} from "../functions/isChildMatchSearchKeyFound";
-import {addChildToDataset} from "../functions/addChildToDataset";
 import {sortSearchResults} from "../functions/sortSearchResults";
 import {convertResultsToTreeNodes} from "../functions/convertResultsToTreeNodes";
 
 function TreeView(props) {
 
-    const {
-        classes,
-        searchKey, setSearchKey,
-        searchResults, setSearchResults,
-        loadedEntity, setLoadedEntity,
-        isLoading, setIsLoading,
-        getSearchResults, getEntity
-    } = props;
+    const {classes, searchKey, searchResults, getSearchResults, setSearchKey, getEntity, loadedEntity} = props;
 
     const rootTree = {keyVal: "root", name: "Government of Sri Lanka", children: []};
 
     const [selectedDate, setSelectedDate] = useState(0);
-    const [previousDate, setPreviousDate] = useState(0);
     const [treeHeight, setTreeHeight] = useState(0);
     const [collapsed, setCollapsed] = useState([]);
     const [timelineDatesArray, setTimelineDatesArray] = useState([]);
@@ -38,16 +24,23 @@ function TreeView(props) {
     const [anchorElement, setAnchorElement] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
 
+    const props_for_pop_window = {isOpen, anchorElement, setAnchorElement, setIsOpen, loadedEntity};
 
-    function handleClick(target) {
-        setAnchorElement(target);
-        setIsOpen(true);
-    }
 
-    function handleClose() {
-        setAnchorElement(null);
-        setIsOpen(false);
-    }
+    const generateTreeDataStructure = useCallback(() => {
+        if (searchResults) {
+            const props_for_tree_view = {
+                searchKey, collapsed, timelineDatesArray, selectedDate,
+                setSearchKey, setCollapsed, getEntity, setAnchorElement, setIsOpen
+            };
+
+            const sortedSearchResults = sortSearchResults(searchResults);
+            let [data, numberOfNodes] = convertResultsToTreeNodes(sortedSearchResults, props_for_tree_view);
+            setTreeData(data);
+            setTreeHeight(numberOfNodes * 18);
+        }
+    }, [searchResults, searchKey, collapsed, timelineDatesArray, selectedDate,
+        setSearchKey, setCollapsed, getEntity, setAnchorElement, setIsOpen]);
 
     useEffect(() => {
         if (!searchResults) {
@@ -57,30 +50,13 @@ function TreeView(props) {
             setTimelineDatesArray(datesArray);
             setSelectedDate(datesArray.length - 1);
         }
-    }, [searchResults]);
+    }, [searchResults, getSearchResults]);
 
     useEffect(() => {
-        if (selectedDate) {
+        if (selectedDate || collapsed) {
             generateTreeDataStructure();
         }
-    }, [selectedDate]);
-
-
-    useEffect(() => {
-        if (collapsed) {
-            generateTreeDataStructure();
-        }
-    }, [collapsed, searchKey]);
-
-    function generateTreeDataStructure() {
-        if (searchResults) {
-            const sortedSearchResults = sortSearchResults(searchResults);
-            let [data, numberOfNodes] = convertResultsToTreeNodes(sortedSearchResults, searchKey, collapsed,
-                timelineDatesArray, selectedDate, setSearchKey, setCollapsed, getEntity, handleClick);
-            setTreeData(data);
-            setTreeHeight(numberOfNodes * 18);
-        }
-    }
+    }, [selectedDate, collapsed, searchKey, generateTreeDataStructure]);
 
     if (searchResults) {
         return (
@@ -92,7 +68,6 @@ function TreeView(props) {
                             index={selectedDate}
                             indexClick={(index) => {
                                 setSelectedDate(index);
-                                setPreviousDate(selectedDate);
                             }}
                             values={timelineDatesArray}/>
                     </div>
@@ -107,12 +82,7 @@ function TreeView(props) {
                         animated
                         keyProp={"keyVal"}
                     />
-                    <PopWindow
-                        isOpen={isOpen}
-                        anchorElement={anchorElement}
-                        handleClose={handleClose}
-                        loadedEntity={loadedEntity}
-                    />
+                    <PopWindow {...props_for_pop_window}/>
                 </div>
             </div>
         );

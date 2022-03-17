@@ -1,4 +1,5 @@
-export function addNodeChildren(title, organizations, childrenMatchingSearchKey, childMatchingSearchKeyFound, setSearchKey, getEntity, handleClick) {
+export function addNodeChildren(title, organizations, childrenMatchingSearchKey, childMatchingSearchKeyFound, props) {
+    const {setSearchKey, getEntity, setAnchorElement, setIsOpen} = props;
     return organizations.map((link) => {
         let shouldHighlight = childrenMatchingSearchKey.includes(link) || !childMatchingSearchKeyFound;
         return {
@@ -10,9 +11,14 @@ export function addNodeChildren(title, organizations, childrenMatchingSearchKey,
                 onClick: (event) => {
                     setSearchKey(link);
                     const currentTarget = event.currentTarget;
-                    getEntity(link, () => handleClick(currentTarget));
+                    getEntity(link, () => handleClick(currentTarget, setAnchorElement, setIsOpen));
                 }
             },
         }
     })
+}
+
+function handleClick(target, setAnchorElement, setIsOpen) {
+    setAnchorElement(target);
+    setIsOpen(true);
 }

@@ -3,8 +3,9 @@ import {arrayIncludesElementsIncluding} from "../helpers/arrayIncludesElementsIn
 import {isChildMatchingSearchKeyFound} from "./isChildMatchSearchKeyFound";
 import {addChildToDataset} from "./addChildToDataset";
 
-export function convertEntityToTreeNode(entity, collapsed, timelineDatesArray, selectedDate, searchKeyLowerCase,
-                                        numberOfNodes, searchKey, setSearchKey, setCollapsed, getEntity, handleClick,data) {
+export function convertEntityToTreeNode(entity, searchKeyLowerCase, numberOfNodes, data, props) {
+
+    const {collapsed, timelineDatesArray, selectedDate} = props;
 
     let organizations = [];
     let organizationsValue = getValueByDate(entity?.attributes?.organizations?.values, timelineDatesArray[selectedDate]);
@@ -19,11 +20,9 @@ export function convertEntityToTreeNode(entity, collapsed, timelineDatesArray, s
     let shouldCollapse = (organizations && entityCollapsed) || childMatchingSearchKeyFound;
 
     if (isChildMatchingSearchKeyFound(searchKeyLowerCase, title, childMatchingSearchKeyFound)) {
-        [data, numberOfNodes] = addChildToDataset(title, shouldCollapse, organizations, collapsed, numberOfNodes, entity, searchKey,
-            setSearchKey, setCollapsed, childrenMatchingSearchKey, childMatchingSearchKeyFound,
-            getEntity, handleClick, data);
+        [data, numberOfNodes] = addChildToDataset(title, shouldCollapse, organizations, numberOfNodes, entity,
+            childrenMatchingSearchKey, childMatchingSearchKeyFound, data, props);
     }
 
     return [data, numberOfNodes]
 }
-

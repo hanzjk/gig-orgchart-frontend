@@ -7,7 +7,12 @@ import {sortValues} from "../../helpers/getValueByDate";
 function PopWindow(props) {
 
     const [sortedParents, setSortedParents] = useState(null);
-    const {isOpen, anchorElement, handleClose, loadedEntity} = props;
+    const {isOpen, anchorElement, setAnchorElement, setIsOpen, loadedEntity} = props;
+
+    function handleClose() {
+        setAnchorElement(null);
+        setIsOpen(false);
+    }
 
     const loadSortedParents = useCallback(() => {
         let parents = null;
