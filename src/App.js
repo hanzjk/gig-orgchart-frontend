@@ -4,6 +4,8 @@ import './index.css';
 import Header from "./shared/header/Header";
 import TreeView from "./tree/Tree";
 import {ThemeProvider, createTheme} from '@mui/material/styles';
+import {generateSearchQuery} from "./functions/generateSearchQuery";
+import {ApiRoutes, getServerUrl} from "./server";
 
 const appTheme = createTheme({
     palette: {
@@ -29,13 +31,7 @@ function App() {
     function getSearchResults(searchKey) {
         setIsLoading(true);
         if (searchKey.length > 1) {
-            let searchUrl = process.env.REACT_APP_SERVER_URL + 'api/search?query=';
-            if (searchKey.includes(":")) {
-                let searchArray = searchKey.split(":", 2);
-                searchUrl += searchArray[1] + '&attributes=titles,organizations&categories=' + searchArray[0];
-            } else {
-                searchUrl += searchKey;
-            }
+            let searchUrl = generateSearchQuery(searchKey);
             searchUrl += '&limit=0';
 
             fetch(searchUrl, {
@@ -53,7 +49,7 @@ function App() {
 
     function getEntity(title, callback) {
         setIsLoading(true);
-        fetch(process.env.REACT_APP_SERVER_URL + 'api/get/' + title, {
+        fetch(getServerUrl(ApiRoutes.entity) + title, {
             method: 'GET'
         }).then(results => {
             if (results.status === 200) {

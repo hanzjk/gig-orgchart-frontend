@@ -5,7 +5,7 @@ export const styles = theme => ({
         color: 'white',
         textAlign: 'left',
         margin: '10px',
-        backgroundColor: '#242424',
+        backgroundColor: 'rgb(18,18,18)',
     },
     timeline: {
         height: '70px',
