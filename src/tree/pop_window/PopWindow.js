@@ -27,7 +27,7 @@ function PopWindow(props) {
         style={{maxHeight: '80%'}}
         sx={{
             ".MuiPopover-paper": {
-                backgroundColor: "#121212"
+                backgroundColor: 'rgb(9,9,9)'
             }
         }}
         id={'popover'}
@@ -51,7 +51,7 @@ function PopWindow(props) {
                 <VerticalTimelineElement
                     key={parent.date}
                     className="vertical-timeline-element--work"
-                    contentStyle={{background: '#3fb3d9', color: '#fff', fontSize: '10px'}}
+                    contentStyle={{background: '#0784b5', color: '#fff', fontSize: '10px'}}
                     contentArrowStyle={{borderRight: '7px solid  #2593b8'}}
                     date={parent?.date?.split('T')[0]}
                 >

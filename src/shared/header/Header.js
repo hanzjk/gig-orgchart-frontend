@@ -34,33 +34,31 @@ function Header(props) {
     } else { //view header
         return (
             <div>
-                <AppBar position="static" style={{marginTop: 0}}>
-                    <Toolbar className={classes.appBar}>
-                        <Grid container className={classes.header} spacing={2}>
-                            <Grid container>
-                                <Typography variant="h4" component="h4">
-                                    Organization Chart
-                                </Typography>
-                                <div className={classes.search}>
-                                    <form id="search-form" onSubmit={handleSubmit} noValidate autoComplete="off">
-                                        <InputBase
-                                            id="searchInput"
-                                            name="search"
-                                            placeholder="Search…"
-                                            value={searchText}
-                                            onChange={(e) => setSearchText(e.target.value)}
-                                            sx={{color: "black",}}
-                                            classes={{
-                                                root: classes.inputRoot,
-                                                input: classes.inputInput,
-                                            }}
-                                        />
-                                    </form>
-                                </div>
-                            </Grid>
+                <Toolbar className={classes.appBar} style={{zIndex: 1000}}>
+                    <Grid container className={classes.header} spacing={2}>
+                        <Grid container>
+                            <Typography variant="h4" component="h4">
+                                Organization Chart
+                            </Typography>
+                            <div className={classes.search}>
+                                <form id="search-form" onSubmit={handleSubmit} noValidate autoComplete="off">
+                                    <InputBase
+                                        id="searchInput"
+                                        name="search"
+                                        placeholder="Search…"
+                                        value={searchText}
+                                        onChange={(e) => setSearchText(e.target.value)}
+                                        sx={{color: "black",}}
+                                        classes={{
+                                            root: classes.inputRoot,
+                                            input: classes.inputInput,
+                                        }}
+                                    />
+                                </form>
+                            </div>
                         </Grid>
-                    </Toolbar>
-                </AppBar>
+                    </Grid>
+                </Toolbar>
                 <Outlet/>
             </div>
         )

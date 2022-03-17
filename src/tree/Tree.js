@@ -169,31 +169,27 @@ function TreeView(props) {
         return (
             <div className="content">
                 <div className="custom-container">
-                    <Paper className={classes.header} elevation={1}>
-                        <div id="timeline" className={classes.timeline}>
-                            <HorizontalTimeline
-                                styles={{background: 'rgb(36,36,36)', foreground: '#2593B8', outline: '#dfdfdf'}}
-                                index={selectedDate}
-                                indexClick={(index) => {
-                                    setSelectedDate(index);
-                                    setPreviousDate(selectedDate);
-                                }}
-                                values={timelineDatesArray}/>
-                        </div>
-                    </Paper>
-                    <Paper className={classes.treeContainer} style={{paddingTop: '200px'}} elevation={1}>
-                        <AnimatedTree
-                            data={treeData}
-                            height={treeHeight}
-                            width={1500}
-                            svgProps={{
-                                className: 'custom'
+                    <div id="timeline" className={classes.timeline}>
+                        <HorizontalTimeline
+                            styles={{background: '#242424', foreground: '#2593B8', outline: '#dfdfdf'}}
+                            index={selectedDate}
+                            indexClick={(index) => {
+                                setSelectedDate(index);
+                                setPreviousDate(selectedDate);
                             }}
-                            margins={{bottom: 20, left: 20, right: 500, top: 20}}
-                            animated
-                            keyProp={"keyVal"}
-                        />
-                    </Paper>
+                            values={timelineDatesArray}/>
+                    </div>
+                    <AnimatedTree
+                        data={treeData}
+                        height={treeHeight}
+                        width={1500}
+                        svgProps={{
+                            className: 'custom'
+                        }}
+                        margins={{bottom: 20, left: 20, right: 500, top: 20}}
+                        animated
+                        keyProp={"keyVal"}
+                    />
                     <PopWindow
                         isOpen={isOpen}
                         anchorElement={anchorElement}
