@@ -5,7 +5,7 @@ export const styles = theme => ({
         left: '10px',
         right: '10px',
         backgroundColor: 'rgba(36,36,36,0.8)',
-        paddingTop: theme.spacing(2),
+        padding: theme.spacing(2),
         color: 'white',
         textAlign: 'left',
         margin: '-10px',
@@ -21,15 +21,15 @@ export const styles = theme => ({
         textAlign: 'center',
         backgroundColor: '#242424'
     },
-    loadingTitle:{
+    loadingTitle: {
         position: 'relative',
-        top:'40%',
+        top: '40%',
     },
     verticalCenter: {
         position: 'relative',
         top: '50%',
         marginTop: '-250px',
-        marginLeft:'-250px'
+        marginLeft: '-250px'
     },
 
     title: {
@@ -48,14 +48,12 @@ export const styles = theme => ({
         },
     },
     inputRoot: {
-        color: 'inherit',
+        marginTop: '5px',
         width: '100%',
+        paddingLeft: theme.spacing(1.5)
     },
     inputInput: {
-        paddingTop: theme.spacing(1.5),
-        paddingRight: theme.spacing(),
-        paddingBottom: theme.spacing(),
-        paddingLeft: theme.spacing(),
+        padding: theme.spacing(1.5),
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('md')]: {
