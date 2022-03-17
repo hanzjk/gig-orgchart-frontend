@@ -1,40 +1,31 @@
-import React, {Component} from 'react';
-import {HashRouter, Route} from "react-router-dom";
+import React, {useState} from 'react';
+import {Route, Routes} from "react-router-dom";
 import './index.css';
-import Header from "./shared/header";
-import TreeView from "./tree/tree";
+import Header from "./shared/header/Header";
+import TreeView from "./tree/Tree";
+import {ThemeProvider, createTheme} from '@mui/material/styles';
 
-class App extends Component {
+const appTheme = createTheme({
+    palette: {
+        mode: 'dark',
+    },
+});
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            searchKey: "",
-            searchResults: null,
-            loadedEntity: null,
-            loading: true,
-        };
+function App() {
 
-        this.handleChange = this.handleChange.bind(this);
-        this.startLoading = this.startLoading.bind(this);
-        this.endLoading = this.endLoading.bind(this);
-        this.getSearchResults = this.getSearchResults.bind(this);
-        this.getEntity = this.getEntity.bind(this);
-    }
+    const [searchKey, setSearchKey] = useState("");
+    const [searchResults, setSearchResults] = useState(null);
+    const [loadedEntity, setLoadedEntity] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const app_props = {
+        searchKey, setSearchKey,
+        searchResults, setSearchResults,
+        loadedEntity, setLoadedEntity,
+        isLoading, setIsLoading
+    };
 
-    startLoading() {
-        this.setState({loading: true});
-    }
 
-    endLoading() {
-        this.setState({loading: false});
-    }
-
-    handleChange(key, value) {
-        this.setState({[key]: value});
-    }
-
-    getSearchResults(searchKey) {
+    function getSearchResults(searchKey) {
         this.startLoading();
         if (searchKey.length > 1) {
             let searchUrl = process.env.REACT_APP_SERVER_URL + 'api/search?query=';
@@ -59,7 +50,7 @@ class App extends Component {
 
     }
 
-    getEntity(title, callback) {
+    function getEntity(title, callback) {
         this.startLoading();
         fetch(process.env.REACT_APP_SERVER_URL + 'api/get/' + title, {
             method: 'GET'
@@ -76,31 +67,16 @@ class App extends Component {
         )
     }
 
-    render() {
-        return (
+    return (
+        <ThemeProvider theme={appTheme}>
             <div className="App">
-                <HashRouter>
-                    <Route path="/"
-                           render={(props) => <Header {...props}
-                                                      loading={this.state.loading}
-                                                      searchKey={this.state.searchKey}
-                                                      handleChange={this.handleChange}
-                           />}
-                    />
-                    <Route exact path="/"
-                           render={(props) => <TreeView {...props}
-                                                        searchKey={this.state.searchKey}
-                                                        handleChange={this.handleChange}
-                                                        searchResults={this.state.searchResults}
-                                                        getSearchResults={this.getSearchResults}
-                                                        getEntity={this.getEntity}
-                                                        loadedEntity={this.state.loadedEntity}
-                           />}
-                    />
-                </HashRouter>
+                <Routes>
+                    <Route  index element={<Header {...app_props}/>}/>
+                    <Route element={<TreeView {...app_props}/>}/>
+                </Routes>
             </div>
-        );
-    }
+        </ThemeProvider>
+    );
 }
 
 export default App;

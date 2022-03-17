@@ -1,16 +1,16 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Popover from '@material-ui/core/Popover';
-import Tree from 'react-tree-graph';
+import {withStyles} from '@mui/styles';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Popover from '@mui/material/Popover';
+import {Tree} from 'react-tree-graph';
 import './tree.css'
 import HorizontalTimeline from 'react-horizontal-timeline';
-import {sortValues} from "../index";
+import {sortValues} from "../helpers/getValueByDate";
 import {VerticalTimeline, VerticalTimelineElement} from 'react-vertical-timeline-component';
 import './timeline.css';
-import {generateTreeDataStructure} from "./functions/generate_tree_data_structure";
+import {generateTreeDataStructure} from "./helpers/generateTreeDataStructure";
 
 const styles = theme => ({
     header: {

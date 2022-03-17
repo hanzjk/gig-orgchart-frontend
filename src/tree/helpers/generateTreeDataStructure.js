@@ -1,4 +1,5 @@
-import {arrayIncludesElementsIncluding, getValueByDate} from "../../index";
+import {arrayIncludesElementsIncluding} from "../../helpers/arrayIncludesElementsIncluding";
+import {getValueByDate} from "../../helpers/getValueByDate";
 
 export function generateTreeDataStructure(props, state) {
 
