@@ -3,7 +3,7 @@ import {Route, Routes} from "react-router-dom";
 import './index.css';
 import Header from "./shared/header/Header";
 import TreeView from "./tree/Tree";
-import {ThemeProvider, createTheme} from '@mui/material/styles';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {generateSearchQuery} from "./functions/generateSearchQuery";
 import {ApiRoutes, getServerUrl} from "./server";
 

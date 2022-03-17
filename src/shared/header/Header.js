@@ -5,7 +5,6 @@ import Typography from "@mui/material/Typography/Typography";
 import InputBase from "@mui/material/InputBase/InputBase";
 import Grid from '@mui/material/Grid';
 import {styles} from "./styles";
-import AppBar from "@mui/material/AppBar/AppBar";
 import Toolbar from "@mui/material/Toolbar/Toolbar";
 import {Outlet} from "react-router-dom";
 

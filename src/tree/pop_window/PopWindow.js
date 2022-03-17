@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import Typography from "@mui/material/Typography/Typography";
 import {VerticalTimeline, VerticalTimelineElement} from "react-vertical-timeline-component/dist-es6";
 import Popover from "@mui/material/Popover/Popover";
