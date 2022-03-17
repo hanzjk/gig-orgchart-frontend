@@ -21,12 +21,13 @@ function App() {
         searchKey, setSearchKey,
         searchResults, setSearchResults,
         loadedEntity, setLoadedEntity,
-        isLoading, setIsLoading
+        isLoading, setIsLoading,
+        getSearchResults, getEntity
     };
 
 
     function getSearchResults(searchKey) {
-        this.startLoading();
+        setIsLoading(true);
         if (searchKey.length > 1) {
             let searchUrl = process.env.REACT_APP_SERVER_URL + 'api/search?query=';
             if (searchKey.includes(":")) {
@@ -42,16 +43,16 @@ function App() {
             }).then(results => {
                 return results.json();
             }).then(data => {
-                this.handleChange("searchResults", data);
+                setSearchResults(data);
             }).then(
-                end => this.endLoading()
+                setIsLoading(false)
             );
         }
 
     }
 
     function getEntity(title, callback) {
-        this.startLoading();
+        setIsLoading(true);
         fetch(process.env.REACT_APP_SERVER_URL + 'api/get/' + title, {
             method: 'GET'
         }).then(results => {
@@ -60,10 +61,10 @@ function App() {
             }
             return null
         }).then(data => {
-            this.handleChange("loadedEntity", data);
+            setLoadedEntity(data);
             callback();
         }).then(
-            end => this.endLoading()
+            setIsLoading(false)
         )
     }
 
@@ -71,8 +72,9 @@ function App() {
         <ThemeProvider theme={appTheme}>
             <div className="App">
                 <Routes>
-                    <Route index element={<Header {...app_props}/>}/>
-                    {/*<Route path="/" element={<TreeView {...app_props}/>}/>*/}
+                    <Route element={<Header {...app_props}/>}>
+                        <Route index element={<TreeView {...app_props}/>}/>
+                    </Route>
                 </Routes>
             </div>
         </ThemeProvider>

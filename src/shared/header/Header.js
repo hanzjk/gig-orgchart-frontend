@@ -7,21 +7,15 @@ import Grid from '@mui/material/Grid';
 import {styles} from "./styles";
 import AppBar from "@mui/material/AppBar/AppBar";
 import Toolbar from "@mui/material/Toolbar/Toolbar";
+import {Outlet} from "react-router-dom";
 
 function Header(props) {
-    const {
-        classes,
-        searchKey, setSearchKey,
-        searchResults, setSearchResults,
-        loadedEntity, setLoadedEntity,
-        isLoading, setIsLoading
-    } = props;
+    const {classes, setSearchKey, isLoading} = props;
     const [searchText, setSearchText] = useState("");
 
     function handleSubmit(event) {
         event.preventDefault();
         setSearchKey(searchText);
-
     }
 
     if (isLoading) {  // view loader
@@ -39,33 +33,36 @@ function Header(props) {
         );
     } else { //view header
         return (
-            <AppBar position="static" style={{marginTop: 0}}>
-                <Toolbar className={classes.appBar}>
-                    <Grid container className={classes.header} spacing={2}>
-                        <Grid container>
-                            <Typography variant="h4" component="h4">
-                                Organization Chart
-                            </Typography>
-                            <div className={classes.search}>
-                                <form id="search-form" onSubmit={handleSubmit} noValidate autoComplete="off">
-                                    <InputBase
-                                        id="searchInput"
-                                        name="search"
-                                        placeholder="Search…"
-                                        value={searchText}
-                                        onChange={(e) => setSearchText(e.target.value)}
-                                        sx={{color: "black", }}
-                                        classes={{
-                                            root: classes.inputRoot,
-                                            input: classes.inputInput,
-                                        }}
-                                    />
-                                </form>
-                            </div>
+            <div>
+                <AppBar position="static" style={{marginTop: 0}}>
+                    <Toolbar className={classes.appBar}>
+                        <Grid container className={classes.header} spacing={2}>
+                            <Grid container>
+                                <Typography variant="h4" component="h4">
+                                    Organization Chart
+                                </Typography>
+                                <div className={classes.search}>
+                                    <form id="search-form" onSubmit={handleSubmit} noValidate autoComplete="off">
+                                        <InputBase
+                                            id="searchInput"
+                                            name="search"
+                                            placeholder="Search…"
+                                            value={searchText}
+                                            onChange={(e) => setSearchText(e.target.value)}
+                                            sx={{color: "black",}}
+                                            classes={{
+                                                root: classes.inputRoot,
+                                                input: classes.inputInput,
+                                            }}
+                                        />
+                                    </form>
+                                </div>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Toolbar>
-            </AppBar>
+                    </Toolbar>
+                </AppBar>
+                <Outlet/>
+            </div>
         )
     }
 }

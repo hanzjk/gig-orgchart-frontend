@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
@@ -185,9 +184,5 @@ class TreeView extends Component {
         }
     }
 }
-
-TreeView.propTypes = {
-    classes: PropTypes.object.isRequired
-};
 
 export default withStyles(styles)(TreeView);
