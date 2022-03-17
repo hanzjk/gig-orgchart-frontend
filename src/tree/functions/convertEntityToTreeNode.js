@@ -19,9 +19,13 @@ export function convertEntityToTreeNode(entity, searchKeyLowerCase, numberOfNode
     let childMatchingSearchKeyFound = childrenMatchingSearchKey?.length > 0;
     let shouldCollapse = (organizations && entityCollapsed) || childMatchingSearchKeyFound;
 
+    const node_props = {
+        shouldCollapse, numberOfNodes, entity,
+        childrenMatchingSearchKey, childMatchingSearchKeyFound
+    };
+
     if (isChildMatchingSearchKeyFound(searchKeyLowerCase, title, childMatchingSearchKeyFound)) {
-        [data, numberOfNodes] = addChildToDataset(title, shouldCollapse, organizations, numberOfNodes, entity,
-            childrenMatchingSearchKey, childMatchingSearchKeyFound, data, props);
+        [data, numberOfNodes] = addChildToDataset(title, organizations, data, node_props, props);
     }
 
     return [data, numberOfNodes]
