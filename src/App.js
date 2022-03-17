@@ -28,10 +28,10 @@ function App() {
     };
 
 
-    function getSearchResults(searchKey) {
+    function getSearchResults(searchInput) {
         setIsLoading(true);
-        if (searchKey.length > 1) {
-            let searchUrl = generateSearchQuery(searchKey);
+        if (searchInput.length > 1) {
+            let searchUrl = generateSearchQuery(searchInput);
             searchUrl += '&limit=0';
 
             fetch(searchUrl, {
