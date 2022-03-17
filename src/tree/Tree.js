@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {withStyles} from '@mui/styles';
 import {AnimatedTree} from 'react-tree-graph';
 import './tree.css'
