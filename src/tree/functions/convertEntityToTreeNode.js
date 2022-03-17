@@ -1,5 +1,5 @@
-import {getValueByDate} from "../helpers/getValueByDate";
-import {arrayIncludesElementsIncluding} from "../helpers/arrayIncludesElementsIncluding";
+import {getValueByDate} from "../../helpers/getValueByDate";
+import {arrayIncludesElementsIncluding} from "../../helpers/arrayIncludesElementsIncluding";
 import {isChildMatchingSearchKeyFound} from "./isChildMatchSearchKeyFound";
 import {addChildToDataset} from "./addChildToDataset";
 

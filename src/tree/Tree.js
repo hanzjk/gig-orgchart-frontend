@@ -7,8 +7,8 @@ import './timeline.css';
 import {styles} from "./styles";
 import {collectDatesForTimeline} from "./functions/collectDatesForTimeline";
 import PopWindow from "./pop_window/PopWindow";
-import {sortSearchResults} from "../functions/sortSearchResults";
-import {convertResultsToTreeNodes} from "../functions/convertResultsToTreeNodes";
+import {sortSearchResults} from "./functions/sortSearchResults";
+import {convertResultsToTreeNodes} from "./functions/convertResultsToTreeNodes";
 
 function TreeView(props) {
 

@@ -4,7 +4,7 @@ import './index.css';
 import Header from "./shared/header/Header";
 import TreeView from "./tree/Tree";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {generateSearchQuery} from "./functions/generateSearchQuery";
+import {generateSearchQuery} from "./tree/functions/generateSearchQuery";
 import {ApiRoutes, getServerUrl} from "./server";
 
 const appTheme = createTheme({
