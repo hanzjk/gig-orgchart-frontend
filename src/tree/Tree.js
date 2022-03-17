@@ -11,6 +11,7 @@ import {VerticalTimeline, VerticalTimelineElement} from 'react-vertical-timeline
 import './timeline.css';
 import {styles} from "./styles";
 import {arrayIncludesElementsIncluding} from "../helpers/arrayIncludesElementsIncluding";
+import {collectDatesForTimeline} from "./functions/collectDatesForTimeline";
 
 function TreeView(props) {
 
@@ -29,19 +30,19 @@ function TreeView(props) {
     const [previousDate, setPreviousDate] = useState(0);
     const [treeHeight, setTreeHeight] = useState(0);
     const [collapsed, setCollapsed] = useState([]);
-    const [dates, setDates] = useState([]);
+    const [timelineDatesArray, setTimelineDatesArray] = useState([]);
     const [treeData, setTreeData] = useState(rootTree);
-    const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorElement, setAnchorElement] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const [sortedParents, setSortedParents] = useState(null);
 
     function handleClick(target) {
-        setAnchorEl(target);
+        setAnchorElement(target);
         setIsOpen(true);
     }
 
     function handleClose() {
-        setAnchorEl(null);
+        setAnchorElement(null);
         setIsOpen(false);
     }
 
@@ -49,9 +50,19 @@ function TreeView(props) {
         if (!searchResults) {
             getSearchResults("OrgChart:");
         } else {
-            collectDatesForTimeline();
+            const datesArray = collectDatesForTimeline(searchResults);
+            setTimelineDatesArray(datesArray);
+            setSelectedDate(datesArray.length - 1);
         }
     }, [searchResults]);
+
+    useEffect(() => {
+        if (selectedDate) {
+            generateTreeDataStructure();
+            loadSortedParents();
+        }
+    }, [selectedDate]);
+
 
     useEffect(() => {
         if (selectedDate) {
@@ -66,29 +77,12 @@ function TreeView(props) {
         }
     }, [collapsed, searchKey]);
 
-    function collectDatesForTimeline() {
-        let datesArray = [];
-
-        function addDateToTimeline(item) {
-            let newDate = item.date;
-            if (!datesArray.includes(newDate)) {
-                datesArray.push(newDate);
-            }
+    useEffect(() => {
+        if (loadedEntity) {
+           loadSortedParents();
         }
+    }, [loadedEntity]);
 
-        if (searchResults) {
-            for (let entity of searchResults) {
-                entity?.attributes?.organizations?.values?.forEach(addDateToTimeline);
-                if (!entity?.attributes?.titles) {
-                    console.log(entity)
-                }
-                entity?.attributes?.titles?.values?.forEach(addDateToTimeline);
-            }
-            datesArray.sort();
-        }
-        setDates(datesArray);
-        setSelectedDate(datesArray.length - 1);
-    }
 
     function loadSortedParents() {
         let parents = null;
@@ -114,8 +108,8 @@ function TreeView(props) {
             for (let entity of sortedSearchResults) {
 
                 let organizations = null;
-                let organizationsValue = getValueByDate(entity?.attributes?.organizations?.values, dates[selectedDate]);
-                let title = getValueByDate(entity?.attributes?.titles?.values, dates[selectedDate]);
+                let organizationsValue = getValueByDate(entity?.attributes?.organizations?.values, timelineDatesArray[selectedDate]);
+                let title = getValueByDate(entity?.attributes?.titles?.values, timelineDatesArray[selectedDate]);
                 let entityCollapsed = collapsed.includes(entity.title);
 
                 if (organizationsValue !== "") {
@@ -203,7 +197,7 @@ function TreeView(props) {
                                     setSelectedDate(index);
                                     setPreviousDate(selectedDate);
                                 }}
-                                values={dates}/>
+                                values={timelineDatesArray}/>
                         </div>
                     </Paper>
                     <Paper className={classes.treeContainer} style={{paddingTop: '200px'}} elevation={1}>
@@ -223,7 +217,7 @@ function TreeView(props) {
                         style={{maxHeight: '80%'}}
                         id={'popover'}
                         open={isOpen}
-                        anchorEl={anchorEl}
+                        anchorEl={anchorElement}
                         onClose={handleClose}
                         anchorOrigin={{
                             vertical: 'bottom',
