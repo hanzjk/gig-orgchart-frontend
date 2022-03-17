@@ -1,17 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {withStyles} from '@mui/styles';
 import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Popover from '@mui/material/Popover';
-import {Tree} from 'react-tree-graph';
+import {AnimatedTree} from 'react-tree-graph';
 import './tree.css'
 import HorizontalTimeline from 'react-horizontal-timeline';
-import {getValueByDate, sortValues} from "../helpers/getValueByDate";
-import {VerticalTimeline, VerticalTimelineElement} from 'react-vertical-timeline-component';
+import {getValueByDate} from "../helpers/getValueByDate";
 import './timeline.css';
 import {styles} from "./styles";
 import {arrayIncludesElementsIncluding} from "../helpers/arrayIncludesElementsIncluding";
 import {collectDatesForTimeline} from "./functions/collectDatesForTimeline";
+import PopWindow from "./pop_window/PopWindow";
 
 function TreeView(props) {
 
@@ -34,7 +32,7 @@ function TreeView(props) {
     const [treeData, setTreeData] = useState(rootTree);
     const [anchorElement, setAnchorElement] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
-    const [sortedParents, setSortedParents] = useState(null);
+
 
     function handleClick(target) {
         setAnchorElement(target);
@@ -59,7 +57,6 @@ function TreeView(props) {
     useEffect(() => {
         if (selectedDate) {
             generateTreeDataStructure();
-            loadSortedParents();
         }
     }, [selectedDate]);
 
@@ -67,7 +64,6 @@ function TreeView(props) {
     useEffect(() => {
         if (selectedDate) {
             generateTreeDataStructure();
-            loadSortedParents();
         }
     }, [selectedDate]);
 
@@ -76,21 +72,6 @@ function TreeView(props) {
             generateTreeDataStructure();
         }
     }, [collapsed, searchKey]);
-
-    useEffect(() => {
-        if (loadedEntity) {
-           loadSortedParents();
-        }
-    }, [loadedEntity]);
-
-
-    function loadSortedParents() {
-        let parents = null;
-        if (loadedEntity?.attributes?.parent) {
-            parents = sortValues(loadedEntity?.attributes?.parent?.values);
-        }
-        setSortedParents(parents);
-    }
 
     function generateTreeDataStructure() {
         let data = {
@@ -201,7 +182,7 @@ function TreeView(props) {
                         </div>
                     </Paper>
                     <Paper className={classes.treeContainer} style={{paddingTop: '200px'}} elevation={1}>
-                        <Tree
+                        <AnimatedTree
                             data={treeData}
                             height={treeHeight}
                             width={1500}
@@ -213,39 +194,12 @@ function TreeView(props) {
                             keyProp={"keyVal"}
                         />
                     </Paper>
-                    <Popover
-                        style={{maxHeight: '80%'}}
-                        id={'popover'}
-                        open={isOpen}
-                        anchorEl={anchorElement}
-                        onClose={handleClose}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        }}
-                    >
-                        <Typography variant="h5">{loadedEntity?.title}<br/><br/></Typography>
-                        <Typography>Parent:</Typography>
-                        {sortedParents &&
-                        <VerticalTimeline>
-                            {sortedParents?.map((parent) => (
-                                <VerticalTimelineElement
-                                    key={parent.date}
-                                    className="vertical-timeline-element--work"
-                                    contentStyle={{background: '#3fb3d9', color: '#fff', fontSize: '10px'}}
-                                    contentArrowStyle={{borderRight: '7px solid  #2593b8'}}
-                                    date={parent?.date?.split('T')[0]}
-                                >
-                                    <p>{parent.value_string}</p>
-                                </VerticalTimelineElement>
-                            ))}
-                        </VerticalTimeline>}
-                        <Typography><br/>Last Updated: {loadedEntity?.updated_at}</Typography>
-                    </Popover>
+                    <PopWindow
+                        isOpen={isOpen}
+                        anchorElement={anchorElement}
+                        handleClose={handleClose}
+                        loadedEntity={loadedEntity}
+                    />
                 </div>
             </div>
         );
