@@ -71,8 +71,8 @@ function App() {
         <ThemeProvider theme={appTheme}>
             <div className="App">
                 <Routes>
-                    <Route  index element={<Header {...app_props}/>}/>
-                    <Route element={<TreeView {...app_props}/>}/>
+                    <Route index element={<Header {...app_props}/>}/>
+                    {/*<Route path="/" element={<TreeView {...app_props}/>}/>*/}
                 </Routes>
             </div>
         </ThemeProvider>

@@ -21,11 +21,15 @@ export const styles = theme => ({
         textAlign: 'center',
         backgroundColor: '#242424'
     },
-
+    loadingTitle:{
+        position: 'relative',
+        top:'40%',
+    },
     verticalCenter: {
         position: 'relative',
         top: '50%',
-        marginTop: '-137px',
+        marginTop: '-250px',
+        marginLeft:'-250px'
     },
 
     title: {
