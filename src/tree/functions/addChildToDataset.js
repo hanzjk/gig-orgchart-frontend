@@ -1,10 +1,9 @@
 import {handleNodeClick} from "./handleNodeClick";
 import {addNodeChildren} from "./addNodeChildren";
 
-export function addChildToDataset(title, organizations, data,node_props, props) {
+export function addChildToDataset(title, organizations, data, numberOfNodes, node_props, props) {
     const {searchKey, collapsed, setSearchKey, setCollapsed} = props;
-    const {shouldCollapse, numberOfNodes, entity,
-        childrenMatchingSearchKey, childMatchingSearchKeyFound} = node_props;
+    const {shouldCollapse, entity, childrenMatchingSearchKey, childMatchingSearchKeyFound} = node_props;
 
     if (title !== "" && !title.includes(" - Terminated on ")) {
         numberOfNodes += shouldCollapse ? organizations.length : 1;
