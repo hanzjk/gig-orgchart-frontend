@@ -25,6 +25,11 @@ function PopWindow(props) {
 
     return <Popover
         style={{maxHeight: '80%'}}
+        sx={{
+            ".MuiPopover-paper": {
+                backgroundColor: "#121212"
+            }
+        }}
         id={'popover'}
         open={isOpen}
         anchorEl={anchorElement}
