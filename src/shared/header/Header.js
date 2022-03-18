@@ -8,7 +8,7 @@ import Toolbar from "@mui/material/Toolbar/Toolbar";
 import {Outlet} from "react-router-dom";
 
 function Header(props) {
-    const {classes, setSearchKey, isLoading} = props;
+    const {classes, setSearchKey, searchResults} = props;
     const [searchText, setSearchText] = useState("");
 
     function handleSubmit(event) {
@@ -16,9 +16,12 @@ function Header(props) {
         setSearchKey(searchText);
     }
 
+    if (!searchResults) {
+        return <Outlet/>
+    }
+
     return (
         <div>
-            {(!isLoading) &&
             <Toolbar className={classes.appBar} style={{zIndex: 1000}}>
                 <Grid container className={classes.header} spacing={2}>
                     <Grid container>
@@ -44,7 +47,6 @@ function Header(props) {
                     </Grid>
                 </Grid>
             </Toolbar>
-            }
             <Outlet/>
         </div>
     )
