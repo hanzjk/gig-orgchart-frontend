@@ -9,6 +9,7 @@ import {collectDatesForTimeline} from "./functions/collectDatesForTimeline";
 import PopWindow from "./pop_window/PopWindow";
 import {sortSearchResults} from "./functions/sortSearchResults";
 import {convertResultsToTreeNodes} from "./functions/convertResultsToTreeNodes";
+import CircleLoader from "react-spinners/CircleLoader";
 
 function TreeView(props) {
 
@@ -87,7 +88,16 @@ function TreeView(props) {
             </div>
         );
     } else {
-        return <div/>
+        return <div className={classes.loaderContainer}>
+            <h1 className={classes.loadingTitle}>Organization Chart</h1>
+            <div className={classes.verticalCenter}>
+                <CircleLoader
+                    size={250}
+                    color={"#2593B8"}
+                    loading={true}
+                />
+            </div>
+        </div>
     }
 }
 
