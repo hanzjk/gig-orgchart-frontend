@@ -28,6 +28,7 @@ function Header(props) {
                         loading={true}
                     />
                 </div>
+                <Outlet/>
             </div>
         );
     } else { //view header

@@ -18,7 +18,7 @@ function App() {
     const [searchKey, setSearchKey] = useState("");
     const [searchResults, setSearchResults] = useState(null);
     const [loadedEntity, setLoadedEntity] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const app_props = {
         searchKey, setSearchKey,
         searchResults, setSearchResults,
