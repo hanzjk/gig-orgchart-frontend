@@ -6,7 +6,7 @@ import HorizontalTimeline from 'react-horizontal-timeline';
 import './timeline.css';
 import {styles} from "./styles";
 import {collectDatesForTimeline} from "./functions/collectDatesForTimeline";
-import PopWindow from "./pop_window/PopWindow";
+import PopWindow from "./pop-window/PopWindow";
 import {sortSearchResults} from "./functions/sortSearchResults";
 import {convertResultsToTreeNodes} from "./functions/convertResultsToTreeNodes";
 import CircleLoader from "react-spinners/CircleLoader";
