@@ -35,9 +35,9 @@ jobs:
     - name: Build
       run: npm run build --if-present
       env:
-        REACT_APP_BASE_URL: https://orgchart.opensource.lk
-        REACT_APP_SERVER_URL: https://api.gigdemo.opensource.lk/
-        PORT: 445
+        REACT_APP_BASE_URL: $BASE_URL
+        REACT_APP_SERVER_URL: $SERVER_URL
+        PORT: $PORT_NO
     - name: Deploy
       run: |
         git config --global user.name $user_name
