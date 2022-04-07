@@ -34,7 +34,6 @@ jobs:
         git config --global user.name $user_name
         git config --global user.email $user_email
         git remote set-url origin https://${github_token}@github.com/${repository}
-        cp CNAME build/
         npm run deploy
       env:
         REACT_APP_SERVER_URL: https://api.gigdemo.opensource.lk/
@@ -47,3 +46,4 @@ jobs:
       uses: planetoftheweb/copy-to-branches@v1
       env:
         files: CNAME
+        key: master
