@@ -4,8 +4,10 @@ import './index.css';
 import App from './App';
 import {BrowserRouter} from 'react-router-dom'
 
+const routerBaseName = process.env.PUBLIC_URL;
+
 ReactDOM.render(
-    <BrowserRouter>
+    <BrowserRouter basename={routerBaseName}>
         <App/>
     </BrowserRouter>,
     document.getElementById('root')
