@@ -5,8 +5,8 @@ name: Node.js CI
 
 on:
   push:
-    tags: 
-      - 'test*'
+    branches: 
+      - master
 
 jobs:
   build:
@@ -52,3 +52,9 @@ jobs:
         user_email: 'github-actions[bot]@users.noreply.github.com'
         github_token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
         repository: ${{ github.repository }}
+    - name: Copy CNAME
+      uses: planetoftheweb/copy-to-branches@v1
+      env:
+        branches: gh-pages
+        key: master
+        files: CNAME
