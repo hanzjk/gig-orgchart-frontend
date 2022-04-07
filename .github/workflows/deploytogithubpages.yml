@@ -55,6 +55,4 @@ jobs:
     - name: Copy CNAME
       uses: planetoftheweb/copy-to-branches@v1
       env:
-        branches: gh-pages
-        key: master
         files: CNAME
