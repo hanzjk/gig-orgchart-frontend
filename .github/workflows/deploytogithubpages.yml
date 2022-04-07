@@ -13,6 +13,11 @@ jobs:
 
     runs-on: 
       - ubuntu-latest
+    env:
+      SERVER_URL: https://api.gigdemo.opensource.lk/
+      PORT_NO: 445
+      BASE_URL: https://orgchart.opensource.lk
+
     strategy:
       matrix:
         node-version: [14.x]
@@ -30,8 +35,9 @@ jobs:
     - name: Build
       run: npm run build --if-present
       env:
-        REACT_APP_SERVER_URL: https://api.gigdemo.opensource.lk/
-        PORT: 445
+        REACT_APP_PUBLIC_URL: $BASE_URL
+        REACT_APP_SERVER_URL: $SERVER_URL
+        PORT: $PORT_NO
     - name: Deploy
       run: |
         git config --global user.name $user_name
@@ -39,6 +45,9 @@ jobs:
         git remote set-url origin https://${github_token}@github.com/${repository}
         npm run deploy
       env:
+        REACT_APP_PUBLIC_URL: $BASE_URL
+        REACT_APP_SERVER_URL: $SERVER_URL
+        PORT: $PORT_NO
         user_name: 'github-actions[bot]'
         user_email: 'github-actions[bot]@users.noreply.github.com'
         github_token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
