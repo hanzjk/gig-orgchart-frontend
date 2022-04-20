@@ -24,3 +24,5 @@ yarn-error.log*
 
 .idea/
 .env
+
+build_n_deploy.sh
