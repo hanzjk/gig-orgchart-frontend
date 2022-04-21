@@ -1,5 +1,5 @@
 # build environment
-FROM node:12.10.0-alpine as build
+FROM node:14.19.0-alpine as build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json /app/package.json
@@ -15,7 +15,7 @@ ARG PUBLIC_URL=http://localhost:9000/
 ENV REACT_APP_SERVER_URL=$SERVER_URL
 ENV REACT_APP_PUBLIC_URL=$PUBLIC_URL
 
-RUN npm run build
+RUN npm run build --if-present
 
 # host environment
 FROM nginx:1.16.0-alpine
