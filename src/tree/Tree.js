@@ -45,7 +45,7 @@ function TreeView(props) {
 
     useEffect(() => {
         if (!searchResults) {
-            getSearchResults("OrgChart:");
+            getSearchResults("OrgChart:&attributes=organizations,titles");
         } else {
             const datesArray = collectDatesForTimeline(searchResults);
             setTimelineDatesArray(datesArray);
