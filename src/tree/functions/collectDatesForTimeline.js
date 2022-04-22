@@ -11,8 +11,6 @@ export function collectDatesForTimeline(searchResults) {
     if (searchResults) {
         for (let entity of searchResults) {
             entity?.attributes?.organizations?.values?.forEach(addDateToTimeline);
-            if (!entity?.attributes?.titles) {
-            }
             entity?.attributes?.titles?.values?.forEach(addDateToTimeline);
         }
         datesArray.sort();
