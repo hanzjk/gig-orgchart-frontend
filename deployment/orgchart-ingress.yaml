@@ -35,4 +35,4 @@ spec:
   tls:
     - hosts:
         - orgchart.datafoundation.lk
-      secretname: orgchart-ing-1651760884
+      secretName: orgchart-ing
