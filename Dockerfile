@@ -17,7 +17,11 @@ ENV REACT_APP_PUBLIC_URL=$PUBLIC_URL
 RUN npm run build --if-present
 
 # host environment
-FROM nginx:1.16.0-alpine
+FROM nginx:1.25.1-alpine
+
+# Update and upgrade Alpine packages
+RUN apk update && apk upgrade
+
 COPY --from=build /app/build /usr/share/nginx/html
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx/nginx.conf /etc/nginx/conf.d
