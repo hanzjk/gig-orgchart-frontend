@@ -26,19 +26,15 @@ RUN apk update && apk upgrade
 
 COPY --from=build /app/build /usr/share/nginx/html
 RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx/nginx.conf /etc/nginx/conf.d
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
-# Create a non-root user
-RUN adduser -D -u 10014 choreouser
+# Create necessary directories and set permissions
+RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx && \
+    chown -R nginx:nginx /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html && \
+    chmod -R 755 /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html
 
-# Change ownership of the nginx html directory
-RUN chown -R choreouser:choreouser /usr/share/nginx/html
-
-# Modify Nginx configuration to use port 8080
-RUN sed -i 's/listen\s*80;/listen 8080;/g' /etc/nginx/conf.d/nginx.conf
-
-# Switch to the non-root user
-USER 10014
+# Switch to the nginx user
+USER nginx
 
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
