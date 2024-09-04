@@ -10,11 +10,7 @@ RUN npm install react-scripts@3.0.1 -g --silent
 COPY . /app
 
 # set baseurl to get connected with backend API
-ARG SERVER_URL=http://localhost:9000/
-ARG PUBLIC_URL=http://localhost:9000/
 
-ENV REACT_APP_SERVER_URL=$SERVER_URL
-ENV REACT_APP_PUBLIC_URL=$PUBLIC_URL
 
 RUN npm run build --if-present
 
