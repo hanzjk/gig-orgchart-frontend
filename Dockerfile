@@ -26,12 +26,12 @@ RUN apk update && apk upgrade
 
 COPY --from=build /app/build /usr/share/nginx/html
 RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Create necessary directories and set permissions
-RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx && \
-    chown -R 10014:10014 /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html && \
-    chmod -R 755 /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html
+RUN mkdir -p /tmp/nginx /var/cache/nginx /var/run /var/log/nginx && \
+    chown -R 10014:10014 /tmp/nginx /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html && \
+    chmod -R 755 /tmp/nginx /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html
 
 # Create a non-root user
 RUN adduser -D -u 10014 choreouser
@@ -40,4 +40,5 @@ RUN adduser -D -u 10014 choreouser
 USER 10014
 
 EXPOSE 8080
+
 CMD ["nginx", "-g", "daemon off;"]
