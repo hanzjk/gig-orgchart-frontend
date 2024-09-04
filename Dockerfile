@@ -30,11 +30,14 @@ COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Create necessary directories and set permissions
 RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx && \
-    chown -R nginx:nginx /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html && \
+    chown -R 10014:10014 /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html && \
     chmod -R 755 /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html
 
-# Switch to the nginx user
-USER nginx
+# Create a non-root user
+RUN adduser -D -u 10014 choreouser
+
+# Switch to the non-root user
+USER 10014
 
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
