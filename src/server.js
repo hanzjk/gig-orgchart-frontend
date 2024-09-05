@@ -1,6 +1,6 @@
 export const ApiRoutes = {
-    search: 'api/search?query=',
-    entity: 'api/get/',
+    search: 'search?query=',
+    entity: 'get/',
 };
 
 export function getServerUrl(url) {
