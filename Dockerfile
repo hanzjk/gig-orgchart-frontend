@@ -14,10 +14,6 @@ RUN npm install react-scripts@3.0.1 -g --silent
 COPY . /app
 RUN npm run build --if-present
 
-# Ensure config.js is not altered and copy it explicitly
-RUN cp /app/public/config.js /app/build/config.js
-RUN cat /app/public/config.js
-RUN cat /app/build/config.js
 
 # host environment
 FROM nginx:1.25.1-alpine
